@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useRef } from "react";
 import { db } from "../Firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -40,6 +41,7 @@ export default function LogIn() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const usersRef = collection(db, "users");
+  const navigate= useNavigate();
 
   const login = async (e) => {
     e.preventDefault();
@@ -50,8 +52,11 @@ export default function LogIn() {
     const result = await getDocs(search);
     if (result.docs.length > 0) {
       const user = result.docs[0].data();
+      const user_id = result.docs[0].id 
       if (user.password === passwordRef.current.value) {
         console.log("login successful");
+        localStorage.setItem("user_logged", JSON.stringify( user_id));
+        navigate("/dashboard", {replace: true});
       } else {
         console.log("login failed");
       }
