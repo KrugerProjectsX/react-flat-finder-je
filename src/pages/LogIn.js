@@ -16,6 +16,7 @@ import { useRef } from "react";
 import { db } from "../Firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function Copyright(props) {
   return (
@@ -42,9 +43,11 @@ export default function LogIn() {
   const passwordRef = useRef(null);
   const usersRef = collection(db, "users");
   const navigate= useNavigate();
+  const [isProgress, setIsProgress] = useState(false);
 
   const login = async (e) => {
     e.preventDefault();
+    setIsProgress(true);
     const search = query(
       usersRef,
       where("email", "==", emailRef.current.value)
@@ -53,16 +56,21 @@ export default function LogIn() {
     if (result.docs.length > 0) {
       const user = result.docs[0].data();
       const user_id = result.docs[0].id 
+      setIsProgress(false);
       if (user.password === passwordRef.current.value) {
         console.log("login successful");
         localStorage.setItem("user_logged", JSON.stringify( user_id));
         navigate("/dashboard", {replace: true});
+        setIsProgress(false);
       } else {
         console.log("login failed");
+        setIsProgress(false);
       }
     } else {
       console.log(" email failed");
+      setIsProgress(false);
     }
+    setIsProgress(false);
   };
 
   return (
@@ -116,6 +124,7 @@ export default function LogIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={isProgress}
             >
               Log In
             </Button>
@@ -126,7 +135,7 @@ export default function LogIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/sign-up" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
