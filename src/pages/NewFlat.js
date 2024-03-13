@@ -1,5 +1,5 @@
-import { FlatForm } from "../Components/FlatForm"
-import ResponsiveAppBar from "../Components/Nabvar"
+import { FlatForm } from "../components/FlatForm"
+import ResponsiveAppBar from "../components/Nabvar"
 
 
 const NewFlat = () =>{
