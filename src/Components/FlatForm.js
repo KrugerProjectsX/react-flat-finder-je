@@ -1,21 +1,37 @@
 import Box from '@mui/material/Box';
 import { Button, Switch, TextField, Typography } from '@mui/material';
 import { useRef } from 'react';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from "../Firebase";
 
 const FlatForm = () =>{
+    
+    const flatsRef = collection(db , 'flats')
+
+
 
     const date = new Date().toJSON().slice(0 , 10);
     const city = useRef('')
     const streetName = useRef('')
-    const streetNumber = useRef(0)
+    const streetNumber = useRef('')
     const areaSize = useRef(0)
     const hasAC = useRef(false)
     const yearBuilt = useRef(0)
     const rentPrice = useRef(0)
-    const dateAvailable = useRef(0)
+    const dateAvailable = useRef('')
 
-    const handleSubmit =(e)=>{
+    const handleSubmit = async (e)=>{
         e.preventDefault();
+        await addDoc(flatsRef , {
+            city : city.current.value,
+            streetName : streetName.current.value ,
+            streetNumber : streetNumber.current.value , 
+            areaSize : areaSize.current.value , 
+            hasAC : hasAC.current.checked , 
+            yearBuilt : yearBuilt.current.value , 
+            rentPrice : rentPrice.current.value , 
+            dateAvailable : dateAvailable.current.value
+        })
 
     }
 
@@ -31,13 +47,12 @@ const FlatForm = () =>{
         <TextField label='Area size' type='number' inputRef={areaSize}  variant='outlined'/>
         </Box><br/><br/>
         <Box display={'flex'}>
-        <Box>
+        <div>
       <Switch
-        control={<Switch checked={hasAC}/>}
-        label="Has AC"
+        inputRef={hasAC}
       />
-      <label>Has AC</label>
-    </Box>
+      <label htmlFor='switch'>Has AC</label>
+    </div>
         <TextField label='Year built' type='number' inputProps={{min: 1900 , max:2050}} inputRef={yearBuilt} variant='outlined'/>
         </Box><br/><br/>
         <Box display={'flex'}>
