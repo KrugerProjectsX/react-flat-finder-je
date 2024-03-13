@@ -5,6 +5,7 @@ export default function Home(){
         <>
         <ResponsiveAppBar/>
         <h1>Home</h1>
+        
         </>
     )
 }
