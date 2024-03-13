@@ -1,4 +1,4 @@
-import ResponsiveAppBar from "../Components/Nabvar"
+import ResponsiveAppBar from "../components/Nabvar"
 
 export default function Home(){
     return (
