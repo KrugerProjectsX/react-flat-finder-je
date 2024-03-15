@@ -46,12 +46,18 @@ const currentDate = new Date().toISOString().slice(0, 10);
       birthday: birthdayRef.current.value,
     };
     if (type === "create") {
+        user.password = passwordRef.current.value;
       await addDoc(refCreate, user);
     }
     console.log(user);
 
     if (type === "update") {
-      await updateDoc(ref, user);
+      await updateDoc(ref, {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        birthday: user.birthday,
+      });;
     }
     if (type === "view") {
       console.log(user);
@@ -182,9 +188,11 @@ const currentDate = new Date().toISOString().slice(0, 10);
         )}
         <Grid container justifyContent="flex-end">
           <Grid item>
+          {type === "create" && (
             <Link href="/" variant="body2">
               Already have an account? Sign in
             </Link>
+            )}
           </Grid>
         </Grid>
         </>
