@@ -14,7 +14,7 @@
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
         {'Copyright © '}
         <Link color="inherit" href="https://mui.com/">
-            Your Website
+            Flat Finder
         </Link>{' '}
         {new Date().getFullYear()}
         {'.'}
@@ -47,7 +47,7 @@
             <Typography component="h1" variant="h5">
                 Sign up
             </Typography>
-            <FormRegister/>
+            <FormRegister type={"create"}/>
             </Box>
             <Copyright sx={{ mt: 5 }} />
         </Container>

@@ -11,7 +11,7 @@ import FormRegister from '../components/FormRegister';
 
 const defaultTheme = createTheme();
 
-export default function Profile() {
+export default function UpdateProfile() {
 
 
 return (
@@ -30,9 +30,9 @@ return (
             <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-            Profile
+            Update Profile
         </Typography>
-        <FormRegister type={'view'}/>
+        <FormRegister type={'update'}/>
         </Box>
     </Container>
     </ThemeProvider>
