@@ -93,6 +93,9 @@ const currentDate = new Date().toISOString().slice(0, 10);
     if (type === "view" || type === "update") {
       await getUserData();
     }
+    else{
+        setUserLoaded(true)
+    }
   };
   useEffect(() => {
     processData();
