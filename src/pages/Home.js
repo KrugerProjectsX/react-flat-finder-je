@@ -1,11 +1,11 @@
 import ResponsiveAppBar from "../components/Nabvar"
+import { TableFlats } from "../components/Tables"
 
 export default function Home(){
     return (
         <>
-        <ResponsiveAppBar/>
-        <h1>Home</h1>
-        
+        <ResponsiveAppBar/><br/><br/><br/>
+        <TableFlats/>
         </>
     )
 }
