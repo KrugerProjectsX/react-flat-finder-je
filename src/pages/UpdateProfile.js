@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';    
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import FormRegister from '../components/FormRegister';
+import ResponsiveAppBar from '../components/Nabvar'
 
 const defaultTheme = createTheme();
 
@@ -15,6 +16,8 @@ export default function UpdateProfile() {
 
 
 return (
+   <>
+   <ResponsiveAppBar/>
     <ThemeProvider theme={defaultTheme}>
     <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -36,5 +39,6 @@ return (
         </Box>
     </Container>
     </ThemeProvider>
+   </>
 );
 }
