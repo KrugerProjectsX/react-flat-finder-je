@@ -17,6 +17,8 @@ import { db } from "../Firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 function Copyright(props) {
   return (
@@ -44,6 +46,19 @@ export default function LogIn() {
   const usersRef = collection(db, "users");
   const navigate= useNavigate();
   const [isProgress, setIsProgress] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState(null);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const showAlertMessage = (severity, message) => {
+    setAlertSeverity(severity);
+    setAlertMessage(message);
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 2000); // Mostrar alerta durante 2 segundos
+  };
+ 
 
   const login = async (e) => {
     e.preventDefault();
@@ -59,15 +74,20 @@ export default function LogIn() {
       setIsProgress(false);
       if (user.password === passwordRef.current.value) {
         console.log("login successful");
+        showAlertMessage("success", "Login successful");  
         localStorage.setItem("user_logged", JSON.stringify( user_id));
-        navigate("/dashboard", {replace: true});
+        setTimeout(() => {
+          navigate("/dashboard", {replace: true});
+        }, 2000); // Redirigir al dashboard después de 2 segundos
         setIsProgress(false);
       } else {
         console.log("login failed");
+        showAlertMessage("error", "Incorrect email or password");
         setIsProgress(false);
       }
     } else {
       console.log(" email failed");
+      showAlertMessage("error", "Email not found");
       setIsProgress(false);
     }
     setIsProgress(false);
@@ -92,6 +112,13 @@ export default function LogIn() {
             Flat Finder
           </Typography>
           <Box component="form" onSubmit={login} noValidate sx={{ mt: 1 }}>
+          {showAlert && (
+              <Stack sx={{ width: '100%' }} spacing={2} mb={2}>
+                <Alert severity={alertSeverity} onClose={() => setShowAlert(false)}>
+                  {alertMessage}
+                </Alert>
+              </Stack>
+            )}
             <TextField
               type="email"
               margin="normal"
@@ -115,10 +142,6 @@ export default function LogIn() {
               autoComplete="current-password"
               inputRef={passwordRef}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -129,11 +152,6 @@ export default function LogIn() {
               Log In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
                 <Link href="/sign-up" variant="body2">
                   {"Don't have an account? Sign Up"}
