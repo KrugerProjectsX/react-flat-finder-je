@@ -5,7 +5,7 @@ export default function Home(){
     return (
         <>
         <ResponsiveAppBar/><br/><br/><br/>
-        <TableFlats/>
+        <TableFlats type={'all-flats'}/>
         </>
     )
 }

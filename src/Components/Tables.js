@@ -11,7 +11,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from "react"
 import { useEffect } from "react";
 import { db } from "../Firebase";
-import { collection , getDocs } from "@firebase/firestore";
+import { collection , getDocs , query, where } from "@firebase/firestore";
+
 
 
 
@@ -39,15 +40,34 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const  TableFlats =() => {
-  const flatsCollectionRef = collection(db , "flats")
-  const [information , setInformation] = useState([])
-  const getFlats = async () =>{
-    const response = await getDocs(flatsCollectionRef) ; 
-    setInformation([])
-    setInformation(response.docs.map((doc=>({...doc.data() , id : doc.id}))))
+const  TableFlats =({type}) => {
+const userId= JSON.parse(localStorage.getItem('user_logged'))
+const [flats , setFlats] = useState([])
+const getData = async () =>{ 
+    const ref = collection(db , 'flats')
+    if (type === 'my-flats'){
+        const search = query(ref , where('user' , '==', userId ))
+        const data = await getDocs(search)
+        const forRows = data.docs.map((item)=>{
+            return {...item.data() , id: item.id}
+        })
+        setFlats(forRows)
+    }
+    if(type === 'favorite-flats'){
+
+    }
+    if(type === 'all-flats'){
+        const response = await getDocs(ref)
+        const forRows = response.docs.map((item)=>{
+            return {...item.data() , id: item.id}
+        })
+        setFlats(forRows)
+    }
+
 }
-  useEffect(()=>getFlats, [])
+
+    useEffect(()=>{getData()}, [])
+
   
   
   return (
@@ -68,7 +88,7 @@ const  TableFlats =() => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {information.map((row) => (
+            {flats.map((row) => (
               <StyledTableRow key={row.name}>
                 <StyledTableCell component="th" scope="row">
                     {row.city}
