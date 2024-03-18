@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp'
 import { NewFlat } from './pages/NewFlat';
 import UpdateProfile from './pages/UpdateProfile'
 import Profile from './pages/Profile';
+import Users from './pages/Users';
 
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
       <Route path ={"/add-new-flat"} element ={<NewFlat/>} />
       <Route path ={"/profile"} element ={<Profile/>} />
       <Route path ={"/update-profile"} element ={<UpdateProfile/>} />
-
+      <Route path ={"/users"} element ={<Users/>} />
     </Routes>
   
   );
