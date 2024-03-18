@@ -68,7 +68,7 @@ export default function FormRegister({ type, onSuccessRedirect }) {
     };
     
     if (type === "create") {
-      user.password = passwordRef.current.value;
+      user={...user, password: passwordRef.current.value, role:'guest'}
       await addDoc(refCreate, user);
       showAlertMessage("success", "User created successfully.");
       navigate('/',  {replace: true})
