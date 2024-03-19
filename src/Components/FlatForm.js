@@ -30,7 +30,8 @@ const FlatForm = () =>{
             hasAC : hasAC.current.checked , 
             yearBuilt : yearBuilt.current.value , 
             rentPrice : rentPrice.current.value , 
-            dateAvailable : dateAvailable.current.value
+            dateAvailable : dateAvailable.current.value , 
+            user: JSON.parse (localStorage.getItem('user_logged'))
         })
 
     }

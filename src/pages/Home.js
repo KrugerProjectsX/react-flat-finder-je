@@ -8,7 +8,7 @@ export default function Home(){
     return (
         <>
         <Header/>
-        <TableFlats/>
+        <TableFlats type={'all-flats'}/>
         </>
     )   
 }
