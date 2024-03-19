@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';    
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import FormRegister from '../components/FormRegister';
-import ResponsiveAppBar from '../components/Nabvar'
+import ResponsiveAppBar from '../components/Header'
 
 const defaultTheme = createTheme();
 
