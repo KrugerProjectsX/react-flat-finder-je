@@ -1,4 +1,5 @@
-import ResponsiveAppBar from "../components/Nabvar"
+import Header from "../components/Header"
+
 import { TableFlats } from "../components/Tables"
 
 
@@ -6,7 +7,7 @@ const MyFlats = () =>{
 
     return(
     <>
-    <ResponsiveAppBar/><br/><br/><br/>
+    <Header/>
     <TableFlats type={'my-flats'}/>
     </>)
 }
