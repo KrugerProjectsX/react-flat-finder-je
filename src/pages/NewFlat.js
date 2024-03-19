@@ -1,5 +1,6 @@
 import { FlatForm } from "../components/FlatForm"
-import ResponsiveAppBar from "../components/Header"
+import Header from "../components/Header"
+
 
 
 const NewFlat = () =>{
@@ -8,7 +9,7 @@ const NewFlat = () =>{
 
     return(
     <>
-        <ResponsiveAppBar/>
+        <Header/>
         <FlatForm/>
     </>)
 }
