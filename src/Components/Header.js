@@ -7,7 +7,7 @@ import MenuTransitions from "./MenuTransition";
 import {doc, getDoc} from "firebase/firestore";
 import {db} from "../../src/Firebase";
 import {getUser, getUserLogged} from "../services/users";
-import Link from 
+import { Link } from 'react-router-dom';
 
 export default function Header() {
     const userId = JSON.parse(localStorage.getItem('user_logged')) || false;
@@ -38,10 +38,12 @@ export default function Header() {
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                     </Typography>
                     <div className={'flex items-center justify-center mr-2'}>
-                        <Button className={'text-secondary'}>Home</Button>
-                        <Button className={'text-secondary'}>My Flats</Button>
-                        <Button className={'text-secondary'}>Favourites</Button>
-                        { user && user.role ==='admin' && <Link><Button className={'text-secondary'}>Users</Button></Link>}
+                    <Link to="/dashboard"><Button className={'text-secondary'}>Home</Button></Link>
+                        <Link to="/dashboard"><Button className={'text-secondary'}>My Flats</Button></Link>
+                        <Button className={'text-secondary'}>Favorites</Button>
+                        { user && user.role ==='admin' && <Link to="/users">
+                                <Button className={'text-secondary'}>Users</Button>
+                            </Link>}
                     </div>
                     <MenuTransitions user={user} setUser={setUser}/>
                 </Toolbar>
