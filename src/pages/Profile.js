@@ -9,7 +9,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import FormRegister from '../components/FormRegister';
 import Button from '@mui/material/Button';
 import { navigate, useNavigate } from 'react-router-dom';
-import ResponsiveAppBar from '../components/Nabvar'
+import ResponsiveAppBar from '../components/Header'
 
 const defaultTheme = createTheme();
 
