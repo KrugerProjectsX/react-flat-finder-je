@@ -29,7 +29,13 @@ export default function MenuTransitions({user, setUser}) {
         return () => {
             if (menuItem === 'Log out') {
                 logout();
-            }
+            } 
+            if (menuItem === 'Profile') {
+              navigate('/profile');
+          }
+          if (menuItem === 'UpdateProfile') {
+              navigate('/update-profile');
+          }
         };
     };
 
@@ -51,7 +57,7 @@ export default function MenuTransitions({user, setUser}) {
             </MenuButton>
             <Menu slots={{listbox: AnimatedListbox}}>
                 <MenuItem onClick={createHandleMenuClick('Profile')}><ManageAccountsIcon/> My Profile</MenuItem>
-                <MenuItem onClick={createHandleMenuClick('Account')}><SettingsIcon/> Account Settings</MenuItem>
+                <MenuItem onClick={createHandleMenuClick('UpdateProfile')}><SettingsIcon/>Update Profile</MenuItem>
                 <MenuItem onClick={createHandleMenuClick('Log out')}><ExitToAppIcon/> Log out</MenuItem>
             </Menu>
         </Dropdown>
