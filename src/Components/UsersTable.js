@@ -56,7 +56,7 @@ export default function UsersTable() {
                             <TableCell className="px-6 py-4 whitespace-nowrap">{row.firstName}</TableCell>
                             <TableCell className="px-6 py-4 whitespace-nowrap" >{row.lastName}</TableCell>
                             <TableCell className="px-6 py-4 whitespace-nowrap" >{row.email}</TableCell>
-                            <TableCell className="px-6 py-4 whitespace-nowrap" >{row.birthDate}</TableCell>
+                            <TableCell className="px-6 py-4 whitespace-nowrap" >{row.birthday}</TableCell>
                             <TableCell className="px-6 py-4 whitespace-nowrap" >{row.role ==='admin' ? 'Yes' : 'No'}</TableCell>
                             <TableCell className="px-6 py-4 whitespace-nowrap" >{row.flats}</TableCell>
                         </TableRow>
