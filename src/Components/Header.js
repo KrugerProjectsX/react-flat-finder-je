@@ -8,6 +8,8 @@ import {doc, getDoc} from "firebase/firestore";
 import {db} from "../../src/Firebase";
 import {getUser, getUserLogged} from "../services/users";
 import { Link } from 'react-router-dom';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+
 
 export default function Header() {
     const userId = JSON.parse(localStorage.getItem('user_logged')) || false;
@@ -32,8 +34,7 @@ export default function Header() {
             <AppBar position="static">
                 <Toolbar className={'bg-white'}>
                     <div className={'flex items-center m-4'}>
-                        <img className="pointer-events-none my-auto w-24 lg:w-40 md:w-32"  alt="My SVG"/>
-
+                    <ApartmentIcon className='text-black'/>
                     </div>
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                     </Typography>
