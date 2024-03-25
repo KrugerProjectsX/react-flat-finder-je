@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import { useEffect, useState } from "react";
 import { getDocs, query, where, collection } from "firebase/firestore";
 import { db } from "../../src/Firebase";
+import Button from '@mui/material/Button';
 
 
 // @Params: type: "my-flats" | "all-flats" | "favorite-flats"
@@ -48,6 +49,7 @@ export default function UsersTable() {
                         <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" align="right">Birth Date</TableCell>
                         <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" align="right">is Admin</TableCell>
                         <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" align="right">Flats Count</TableCell>
+                        <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" align="right">Update info</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody className="bg-white divide-y divide-gray-200">
@@ -59,6 +61,7 @@ export default function UsersTable() {
                             <TableCell className="px-6 py-4 whitespace-nowrap" >{row.birthday}</TableCell>
                             <TableCell className="px-6 py-4 whitespace-nowrap" >{row.role ==='admin' ? 'Yes' : 'No'}</TableCell>
                             <TableCell className="px-6 py-4 whitespace-nowrap" >{row.flats}</TableCell>
+                            <TableCell className="px-6 py-4 whitespace-nowrap" ><Button variant="contained">Edit</Button></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

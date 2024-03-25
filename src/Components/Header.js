@@ -40,7 +40,7 @@ export default function Header() {
                     </Typography>
                     <div className={'flex items-center justify-center mr-2'}>
                     <Link to="/dashboard"><Button className={'text-secondary'}>Home</Button></Link>
-                        <Link to="/dashboard"><Button className={'text-secondary'}>My Flats</Button></Link>
+                        { user && (user.role === 'landlord' || user.role === 'admin' )  && <Link to="/dashboard"><Button className={'text-secondary'}>My Flats</Button></Link>}
                         <Button className={'text-secondary'}>Favorites</Button>
                         { user && user.role ==='admin' && <Link to="/users">
                                 <Button className={'text-secondary'}>Users</Button>
