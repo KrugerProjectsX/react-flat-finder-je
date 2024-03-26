@@ -14,6 +14,7 @@ import Button from '@mui/material/Button';
 
 
 
+
 // @Params: type: "my-flats" | "all-flats" | "favorite-flats"
 export default function UsersTable() {
     const ref = collection(db, "users");
