@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { getDocs, query, where, collection } from "firebase/firestore";
 import { db } from "../../src/Firebase";
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+
 
 
 
@@ -94,8 +94,8 @@ export default function UsersTable() {
           onChange={(e)=> setUserType(e.target.value)}>
                     <option key={ 'none' } value={ '' }></option>
                     <option key={ '100-200' } value={ 'admin' }> Admin </option>
-                    <option key={ '200-300' } value={ 'renter' }> Renter </option>
-                    <option key={ '300-400' } value={ 'buyer' }>  Buyer </option> 
+                    <option key={ '200-300' } value={ 'landlord' }> Landlord </option>
+                    <option key={ '300-400' } value={ 'render' }>  Renter </option> 
           </TextField><br/><br/>
           <TextField select label={ 'Flats Count' } 
           variant="outlined" 
