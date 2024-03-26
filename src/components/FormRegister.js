@@ -10,11 +10,13 @@ import { db } from "../Firebase";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import { useNavigate } from "react-router-dom";
-
-
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 export default function FormRegister({ type, onSuccessRedirect }) {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [alertSeverity, setAlertSeverity] = useState(null);
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
@@ -32,6 +34,7 @@ export default function FormRegister({ type, onSuccessRedirect }) {
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const birthdayRef = useRef(currentDate);
+  const roleRef = useRef("");
   const id = JSON.parse(localStorage.getItem("user_logged"));
 
   const refCreate = collection(db, "users");
@@ -57,7 +60,6 @@ export default function FormRegister({ type, onSuccessRedirect }) {
     .split("T")[0]; // Fecha máxima para tener 120 años
 
   const handleSubmit = async (event) => {
-   
     event.preventDefault();
     let user = {
       firstName: firstNameRef.current.value,
@@ -65,14 +67,15 @@ export default function FormRegister({ type, onSuccessRedirect }) {
       email: emailRef.current.value,
       password: passwordRef.current.value,
       birthday: birthdayRef.current.value,
+      role: roleRef.current.value,
     };
-    
+
     if (type === "create") {
-      user={...user, password: passwordRef.current.value, role:'guest'}
+      user = { ...user, password: passwordRef.current.value};
       await addDoc(refCreate, user);
       showAlertMessage("success", "User created successfully.");
-      navigate('/',  {replace: true})
-      console.log(user)
+      navigate("/", { replace: true });
+      console.log(user);
     }
     if (type === "update") {
       await updateDoc(ref, {
@@ -133,6 +136,12 @@ export default function FormRegister({ type, onSuccessRedirect }) {
   useEffect(() => {
     processData();
   }, []);
+
+  // const [ userType,  setUserType] = React.useState('');
+
+  // const handleChange = (event) => {
+  //   setUserType(event.target.value);
+  // };
 
   return (
     <>
@@ -218,6 +227,22 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                   autoComplete="birthday"
                   inputRef={birthdayRef}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                  <Select
+                    labelId="role"
+                    id="role"
+                    // value={userType}
+                    label="role"
+                    // onChange={handleChange}
+                    inputRef={roleRef}
+                  >
+                    <MenuItem value={"landlord"}>Landlord</MenuItem>
+                    <MenuItem value={"renter"}>Renter</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
             {type !== "view" && (
