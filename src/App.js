@@ -24,7 +24,7 @@ function App() {
       <Route path ={"/update-profile"} element ={<UpdateProfile/>} />
       <Route path ={"/users"} element ={<Users/>} />
       <Route path ={'my-flats'} element ={<MyFlats/>}/>
-
+      
     </Routes>
   
   );
