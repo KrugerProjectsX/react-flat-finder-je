@@ -8,10 +8,10 @@ import {styled} from '@mui/system';
 import {CssTransition} from '@mui/base/Transitions';
 import {PopupContext} from '@mui/base/Unstable_Popup';
 import {useNavigate} from "react-router-dom";   
-
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import Avatar from '@mui/material/Avatar';
 
 export default function MenuTransitions({user, setUser}) {
 
@@ -44,8 +44,7 @@ export default function MenuTransitions({user, setUser}) {
             <MenuButton>
                 <div id="dropdownAvatarNameButton" data-dropdown-toggle="dropdownAvatarName"
                      className="flex items-center text-sm pe-1 font-medium rounded-full md:me-0 text-gray-900">
-                    <img className="ml-1 w-8 h-8 me-2 rounded-full" alt="user photo"/> <span
-                    id="nameUserLog"></span>
+                    <Avatar src="/broken-image.jpg" className='m-2' />
                     {user &&(<span>{user.firstName} {user.lastName}</span>)}
                     <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                          viewBox="0 0 10 6">

@@ -8,6 +8,8 @@ import {doc, getDoc} from "firebase/firestore";
 import {db} from "../../src/Firebase";
 import {getUser, getUserLogged} from "../services/users";
 import { Link } from 'react-router-dom';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+
 
 export default function Header() {
     const userId = JSON.parse(localStorage.getItem('user_logged')) || false;
@@ -32,14 +34,13 @@ export default function Header() {
             <AppBar position="static">
                 <Toolbar className={'bg-white'}>
                     <div className={'flex items-center m-4'}>
-                        <img className="pointer-events-none my-auto w-24 lg:w-40 md:w-32"  alt="My SVG"/>
-
+                    <ApartmentIcon className='text-black'/>
                     </div>
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                     </Typography>
                     <div className={'flex items-center justify-center mr-2'}>
                     <Link to="/dashboard"><Button className={'text-secondary'}>Home</Button></Link>
-                        <Link to="/dashboard"><Button className={'text-secondary'}>My Flats</Button></Link>
+                        { user && (user.role === 'landlord' || user.role === 'admin' )  && <Link to="/dashboard"><Button className={'text-secondary'}>My Flats</Button></Link>}
                         <Button className={'text-secondary'}>Favorites</Button>
                         { user && user.role ==='admin' && <Link to="/users">
                                 <Button className={'text-secondary'}>Users</Button>
