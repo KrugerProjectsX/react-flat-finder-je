@@ -30,12 +30,14 @@ export default function Header() {
     return (
         <div>
             <AppBar position="static">
-                <Toolbar className={'bg-white'}>
-                    <div className={'flex items-center m-4'}>
+                <Toolbar className={'bg-white flex justify-between'}>
+                    <div className={' items-center '}>
                     <ApartmentIcon className='text-black'/>
                     </div>
-                   
+                    <div className=''>
                     <MenuTransitions user={user} setUser={setUser}/>
+                    </div>
+                    
                 </Toolbar>
             </AppBar>
         </div>
