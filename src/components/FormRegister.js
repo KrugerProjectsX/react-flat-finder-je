@@ -14,8 +14,16 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { InputAdornment, IconButton } from "@mui/material";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
+
 
 export default function FormRegister({ type, onSuccessRedirect }) {
+  const [showPassword, setShowPassword] = useState(false);
+  const handlePasswordToggle = () => {
+    setShowPassword(!showPassword);
+  };
   const navigate = useNavigate();
   const [alertSeverity, setAlertSeverity] = useState(null);
   const [alertMessage, setAlertMessage] = useState("");
@@ -61,6 +69,9 @@ export default function FormRegister({ type, onSuccessRedirect }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (firstNameError || lastNameError || emailError || passwordError) {
+      return;
+    }
     let user = {
       firstName: firstNameRef.current.value,
       lastName: lastNameRef.current.value,
@@ -71,7 +82,7 @@ export default function FormRegister({ type, onSuccessRedirect }) {
     };
 
     if (type === "create") {
-      user = { ...user, password: passwordRef.current.value};
+      user = { ...user, password: passwordRef.current.value };
       await addDoc(refCreate, user);
       showAlertMessage("success", "User created successfully.");
       navigate("/", { replace: true });
@@ -143,6 +154,55 @@ export default function FormRegister({ type, onSuccessRedirect }) {
   //   setUserType(event.target.value);
   // };
 
+  //validation sign up
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const handleFirstNameChange = (event) => {
+    setFirstNameError(validate(event.target.value, "firstName"));
+  };
+
+  const handleLastNameChange = (event) => {
+    setLastNameError(validate(event.target.value, "lastName"));
+  };
+
+  const handleEmailChange = (event) => {
+    setEmailError(validate(event.target.value, "email"));
+  };
+
+  const handlePasswordChange = (event) => {
+    setPasswordError(validate(event.target.value, "password"));
+  };
+
+  const validate = (value, type) => {
+    if (type === "firstName") {
+      if (!/^[a-zA-Z\s]+$/.test(value)) {
+        return "First name must be a string without numbers.";
+      }
+    }
+
+    if (type === "lastName") {
+      if (!/^[a-zA-Z\s]+$/.test(value)) {
+        return "Last name must be a string without numbers.";
+      }
+    }
+
+    if (type === "email") {
+      if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(value)) {
+        return "Email must be a valid email address.";
+      }
+    }
+
+    if (type === "password") {
+      if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/.test(value)) {
+        return "Password must have at least one number, one lowercase letter, one uppercase letter, and be at least 6 characters long.";
+      }
+    }
+
+    return "";
+  };
   return (
     <>
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
@@ -168,6 +228,9 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                   label="First Name"
                   autoFocus
                   inputRef={firstNameRef}
+                  error={firstNameError !== ""}
+                  helperText={firstNameError}
+                  onChange={handleFirstNameChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -181,6 +244,9 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                   name="lastName"
                   autoComplete="family-name"
                   inputRef={lastNameRef}
+                  error={lastNameError !== ""}
+                  helperText={lastNameError}
+                  onChange={handleLastNameChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -195,6 +261,9 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                   autoComplete="email"
                   inputRef={emailRef}
                   type="email"
+                  error={emailError !== ""}
+                  helperText={emailError}
+                  onChange={handleEmailChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -205,10 +274,25 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                     fullWidth
                     name="password"
                     label="Password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     id="password"
                     autoComplete="new-password"
                     inputRef={passwordRef}
+                    error={passwordError !== ""}
+                    helperText={passwordError}
+                    onChange={handlePasswordChange}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handlePasswordToggle}
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 )}
               </Grid>
@@ -232,6 +316,7 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">Role</InputLabel>
                   <Select
+                    required
                     labelId="role"
                     id="role"
                     // value={userType}

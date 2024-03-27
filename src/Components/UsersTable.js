@@ -67,14 +67,6 @@ export default function UsersTable() {
             const userWithFlats = {...item.data(), id: item.id, flats: dataFlats.docs?.length};
             usersSet.push(userWithFlats);
         }
-        
-        
-
-
-        
-    
-       
-        
         setUsers(usersSet);
         
     };
