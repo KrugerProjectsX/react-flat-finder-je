@@ -10,10 +10,15 @@ import FormRegister from '../components/FormRegister';
 import Button from '@mui/material/Button';
 import { navigate, useNavigate } from 'react-router-dom';
 import ResponsiveAppBar from '../components/Header'
+import { useParams } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
 export default function Profile() {
+    let {userId} =useParams();
+    if(userId===undefined) {
+        userId=null;
+    }
     const navigate =useNavigate();
 
     const handleUpdateProfile = () => {
@@ -41,7 +46,7 @@ return (
         <Typography component="h1" variant="h5">
             Profile
         </Typography>
-        <FormRegister type={'view'}/>
+        <FormRegister type={'view'} userId={userId}/>
         <br></br>
         <Button onClick={handleUpdateProfile} variant="contained">Update Profile</Button>
         </Box>

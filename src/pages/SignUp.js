@@ -53,7 +53,7 @@ export default function SignUp() {
             Sign up
           </Typography>
           <FormRegister
-            type={"create"}
+            type={"create"} userId={null}
           />
         </Box>
         <Copyright sx={{ mt: 5 }} />

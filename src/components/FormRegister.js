@@ -18,8 +18,7 @@ import { InputAdornment, IconButton } from "@mui/material";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 
-
-export default function FormRegister({ type, onSuccessRedirect }) {
+export default function FormRegister({ type, onSuccessRedirect, userId }) {
   const [showPassword, setShowPassword] = useState(false);
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
@@ -28,6 +27,7 @@ export default function FormRegister({ type, onSuccessRedirect }) {
   const [alertSeverity, setAlertSeverity] = useState(null);
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
+  const [allFieldsFilled, setAllFieldsFilled] = useState(true); // Estado para controlar si todos los campos están llenos
 
   const showAlertMessage = (severity, message) => {
     setAlertSeverity(severity);
@@ -43,13 +43,20 @@ export default function FormRegister({ type, onSuccessRedirect }) {
   const passwordRef = useRef("");
   const birthdayRef = useRef(currentDate);
   const roleRef = useRef("");
-  const id = JSON.parse(localStorage.getItem("user_logged"));
+  
+
+  let ref = null;
+  if (userId===null && type !== "create"){
+    userId=JSON.parse(localStorage.getItem("user_logged")); 
+   
+  }
+  if (userId && type !== "create"){
+     ref = doc(db, "users", userId);
+  }
 
   const refCreate = collection(db, "users");
-  let ref = null;
-  if (id) {
-    ref = doc(db, "users", id);
-  }
+  
+ 
 
   const today = new Date();
   const minBirthDate = new Date(
@@ -69,7 +76,37 @@ export default function FormRegister({ type, onSuccessRedirect }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (firstNameError || lastNameError || emailError || passwordError) {
+    // Validar cada campo individualmente
+    const firstNameValidation = validate(
+      firstNameRef.current.value,
+      "firstName"
+    );
+    const lastNameValidation = validate(lastNameRef.current.value, "lastName");
+    const emailValidation = validate(emailRef.current.value, "email");
+    const passwordValidation = validate(passwordRef.current.value, "password");
+
+    // Verificar si alguna validación falló
+    if (
+      firstNameValidation !== "" ||
+      lastNameValidation !== "" ||
+      emailValidation !== "" ||
+      passwordValidation !== ""
+    ) {
+      // Mostrar la alerta si algún campo no pasa la validación
+      showAlertMessage("error", "Please fill in all fields correctly.");
+      return;
+    }
+
+    if (
+      firstNameRef.current.value === "" ||
+      lastNameRef.current.value === "" ||
+      emailRef.current.value === "" ||
+      passwordRef.current.value === "" ||
+      birthdayRef.current.value === "" ||
+      roleRef.current.value === ""
+    ) {
+      showAlertMessage("error", "Please fill in all required fields.");
+      setAllFieldsFilled(false);
       return;
     }
     let user = {
@@ -125,6 +162,7 @@ export default function FormRegister({ type, onSuccessRedirect }) {
       const dataUser = await getDoc(ref);
       if (dataUser.exists()) {
         const responseUser = { ...dataUser.data() };
+        console.log(responseUser);
         setUser(responseUser); // Actualizar el estado del usuario
         setUserLoaded(true);
       } else {
@@ -306,7 +344,7 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                   name="birthday"
                   inputProps={{ min: maxBirthDate, max: minBirthDate }}
                   label={type !== "create" ? "Birthday" : null}
-                  type="date"
+                  type={type === "view" ? "text" : "date"} 
                   id="birthday"
                   autoComplete="birthday"
                   inputRef={birthdayRef}
