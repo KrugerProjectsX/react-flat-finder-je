@@ -9,13 +9,18 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import FormRegister from '../components/FormRegister';
 import ResponsiveAppBar from '../components/Header'
+import { useParams } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
 export default function UpdateProfile() {
 
-
-return (
+    let {userId} = useParams();
+    if(userId===undefined) {
+        userId=null;
+    }
+//TODO:VERIFICAR Q\S ELQ EU ACTUALIZA UN USAURIO QUE NO ES EL MISMO SEA ADMIN 
+return (    
    <>
    <ResponsiveAppBar/>
     <ThemeProvider theme={defaultTheme}>
@@ -35,7 +40,7 @@ return (
         <Typography component="h1" variant="h5">
             Update Profile
         </Typography>
-        <FormRegister type={'update'}/>
+        <FormRegister type={'update'} userId={userId}/>
         </Box>
     </Container>
     </ThemeProvider>
