@@ -9,12 +9,10 @@ import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import { Box} from "@mui/system";
 import { Button } from "@mui/base";
-import { Tooltip, IconButton } from "@mui/material";
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from "react"
 import { useEffect } from "react";
 import { db } from "../Firebase";
-import { collection ,  getDocs , query, where } from "@firebase/firestore";
+import { collection ,  getDocs , query, where , addDoc, doc , getDoc , deleteDoc } from "@firebase/firestore";
 
 
 
@@ -45,11 +43,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const  TableFlats =({type}) => {
+  const refFav = collection(db , 'favorites')
 const userId= JSON.parse(localStorage.getItem('user_logged'))
 const [flats , setFlats] = useState([])
 const [city , setCity] = useState('') ; 
 const [rentPrice , setRentPrice] = useState(0) ; 
-const [areaSize , setAreaSize] = useState(0) ; 
+const [areaSize , setAreaSize] = useState(0) ;
+const [flag, setFlag ] = useState(false); 
 
 
 
@@ -60,38 +60,77 @@ const getData = async () =>{
     if (type === 'my-flats'){
         const search = query(ref , where('user' , '==', userId ))
         const data = await getDocs(search)
-        const forRows = data.docs.map((item)=>{
+        const forRowsMy = data.docs.map((item)=>{
             return {...item.data() , id: item.id}
         })
-        setFlats(forRows)
+        setFlats(forRowsMy)
     }
     if(type === 'favorite-flats'){
-
+      const search = query(refFav, where('userId' , '==' , userId))
+      const data = await getDocs(search) ; 
+      const allFlats = [] ; 
+      for (const item of data.docs){
+        const refFlat = doc(db, 'flats' , item.data().flatId)
+        const dataFlat = await getDoc(refFlat) ; 
+        allFlats.push({...dataFlat.data() , id: dataFlat.id})
+      }
+      setFlats(allFlats)
+    console.log(flats)
     }
     if(type === 'all-flats'){
-        const response = await getDocs(ref)
-        const forRows = response.docs.map((item)=>{
-            return {...item.data() , id: item.id}
-        })
-        setFlats(forRows)
-    }
-    if(city){
+      if(city){
         arrayWhere.push(where('city', '==' , city))
     }
     if(areaSize){
         let settings = areaSize.split('-')
             arrayWhere.push(where('areaSize' , '>=' , parseInt(settings[0])))
+            arrayWhere.push(where('areaSize', '<=', parseInt(settings[1]))); 
             console.log(arrayWhere)
     }
+      let searchFlats = query(ref , ...arrayWhere) ; 
+      const results = await getDocs(searchFlats);
+      const allFlats = []
+      for (const item of results.docs){
+        const search = query(refFav , where('userId' , '==' , userId), where('flatId' , '==', item.id))
+        const dataFav = await getDocs(search)
+        let favorite = false 
+        
+        if(dataFav.docs.length > 0 ){
+          favorite = dataFav.docs[0].id;
+        }
+        const flatWhitFav = {...item.data() , id: item.id , favorite: favorite}
+        allFlats.push(flatWhitFav)
+        
 
-    let searchFlats = query(ref , ...arrayWhere) ; 
-    const results = await getDocs(searchFlats);
-    const newFlats = results.docs.map((item)=>item.data())
-    setFlats(newFlats)
+      }
+
+      setFlats(allFlats)
+   
+    
+    }
+
+
+    
 }
- 
+const addFavorite = async (id) =>{
+  console.log(userId , id)
+  const data = {
+    userId : userId , 
+    flatId : id
+  }
+  await addDoc(refFav, data)
+  setFlag(!flag)
+}
+ const removeFavorite = async (id) =>{
+  const refRemoveFav = doc(db , 'favorites' , id)
+  await deleteDoc(refRemoveFav) ;
+  setFlag(!flag)
+ }
 
     useEffect(()=>{getData()}, [city , areaSize])
+    useEffect(() => {
+      getData();
+  }, [flag]);
 
 
 
@@ -99,7 +138,7 @@ const getData = async () =>{
   
   return (
     <>
-      <Box textAlign={'center'} sx={{width: '60%' , marginLeft: '20%'}} component={'form'}>
+      { type === 'all-flats' && <Box textAlign={'center'} sx={{width: '60%' , marginLeft: '20%'}} component={'form'}>
           <TextField 
           label='City'   
           variant='outlined' 
@@ -140,8 +179,7 @@ const getData = async () =>{
                     <option key={ '900-1000' } value={ '901-1000' }> 900 - 1000 </option>
                     <option key={ '1000' } value={ '+1000' }> + 1000 </option> 
           </TextField><br/><br/>
-          <Button type='submit'>Add Flat</Button>
-      </Box>
+      </Box> }
       <TableContainer sx={{ width: "80%" , marginLeft: '10%' }} >
         <Table aria-label="customized table">
           <TableHead>
@@ -159,7 +197,7 @@ const getData = async () =>{
           </TableHead>
           <TableBody>
             {flats.map((row) => (
-              <StyledTableRow key={row.name}>
+              <StyledTableRow key={row.id}>
                 <StyledTableCell component="th" scope="row">
                     {row.city}
                 </StyledTableCell>
@@ -170,13 +208,13 @@ const getData = async () =>{
                 <StyledTableCell align="center">{row.yearBuilt}</StyledTableCell>
                 <StyledTableCell align="center">{row.rentPrice}</StyledTableCell>
                 <StyledTableCell align="center">{row.dateAvailable}</StyledTableCell>
-                <StyledTableCell align="center">
-                  <Tooltip title="Favorite">
-                    <IconButton>
-                      <FavoriteIcon sx={{hover: 'red'}}/>
-                    </IconButton>
-                  </Tooltip>
-                </StyledTableCell>
+                {type ==='all-flats' && <StyledTableCell align="center">
+                  {!row.favorite && <Button onClick={()=>addFavorite(row.id)}  >Add Favorite</Button>}
+                  {row.favorite && <Button onClick={()=>removeFavorite(row.favorite)}  >Remove Favorite</Button>}
+                  </StyledTableCell> }
+                {type ==='favorite-flats' && <StyledTableCell align="center">
+                  {<Button onClick={()=>removeFavorite(row.id)}  >Remove Favorite</Button>}
+                </StyledTableCell> }
               </StyledTableRow>
             ))}
           </TableBody>

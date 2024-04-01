@@ -44,7 +44,7 @@ const FlatForm = () =>{
         <TextField label='Street name' inputRef={streetName}  variant='outlined'/>
         </Box><br/><br/>
         <Box display={'flex'}>
-        <TextField label='Street number' inputRef={streetNumber}  variant='outlined'/>
+        <TextField label='Street number'  inputRef={streetNumber}  variant='outlined'/>
         <TextField label='Area size' type='number' inputRef={areaSize}  variant='outlined'/>
         </Box><br/><br/>
         <Box display={'flex'}>
