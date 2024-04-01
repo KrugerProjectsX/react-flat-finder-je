@@ -22,12 +22,14 @@ function App() {
       <Route path ={"/sign-up"} element ={<SignUp/>} />
       <Route path ={"/add-new-flat"} element ={<NewFlat/>} />
       <Route path ={"/profile"} element ={<Profile/>} />
+      <Route path ={"/profile/:userId"} element ={<Profile/>} />    
       <Route path ={"/update-profile"} element ={<UpdateProfile/>} />
+      <Route path ={"/update-profile/:userId"} element ={<UpdateProfile/>} />
       <Route path ={"/users"} element ={<Users/>} />
       <Route path ={'/my-flats'} element ={<MyFlats/>}/>
       <Route path = {'/favorite-flats'} element = {<FavoriteFlats/>}/>
       
-    </Routes>
+    </Routes> 
   
   );
 }

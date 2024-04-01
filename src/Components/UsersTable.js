@@ -69,7 +69,7 @@ export default function UsersTable() {
             const userWithFlats = {...item.data(), id: item.id, flats: dataFlats.docs?.length};
             usersSet.push(userWithFlats);
         }
-        
+
         setUsers(usersSet);
         console.log(searchUsers)
         
@@ -144,10 +144,10 @@ export default function UsersTable() {
                             <TableCell className="px-6 py-4 whitespace-nowrap" >{row.role}</TableCell>
 
                             <TableCell className="px-6 py-4 whitespace-nowrap" >{row.flats}</TableCell>
-                            <TableCell className="px-6 py-4 whitespace-nowrap" ><Button variant="contained">Edit</Button></TableCell>
+                            <TableCell className="px-6 py-4 whitespace-nowrap" ><Button href={`update-profile/${row.id}`} variant="contained">Edit</Button></TableCell>
                         </TableRow>
                     ))}
-                </TableBody>
+                </TableBody>    
             </Table>
         </TableContainer>
         </>

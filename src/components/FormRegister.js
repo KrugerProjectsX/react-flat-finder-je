@@ -14,12 +14,20 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { InputAdornment, IconButton } from "@mui/material";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
 
-export default function FormRegister({ type, onSuccessRedirect }) {
+export default function FormRegister({ type, onSuccessRedirect, userId }) {
+  const [showPassword, setShowPassword] = useState(false);
+  const handlePasswordToggle = () => {
+    setShowPassword(!showPassword);
+  };
   const navigate = useNavigate();
   const [alertSeverity, setAlertSeverity] = useState(null);
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
+  const [allFieldsFilled, setAllFieldsFilled] = useState(true); // Estado para controlar si todos los campos están llenos
 
   const showAlertMessage = (severity, message) => {
     setAlertSeverity(severity);
@@ -35,13 +43,20 @@ export default function FormRegister({ type, onSuccessRedirect }) {
   const passwordRef = useRef("");
   const birthdayRef = useRef(currentDate);
   const roleRef = useRef("");
-  const id = JSON.parse(localStorage.getItem("user_logged"));
+  
+
+  let ref = null;
+  if (userId===null && type !== "create"){
+    userId=JSON.parse(localStorage.getItem("user_logged")); 
+   
+  }
+  if (userId && type !== "create"){
+     ref = doc(db, "users", userId);
+  }
 
   const refCreate = collection(db, "users");
-  let ref = null;
-  if (id) {
-    ref = doc(db, "users", id);
-  }
+  
+ 
 
   const today = new Date();
   const minBirthDate = new Date(
@@ -61,6 +76,39 @@ export default function FormRegister({ type, onSuccessRedirect }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Validar cada campo individualmente
+    const firstNameValidation = validate(
+      firstNameRef.current.value,
+      "firstName"
+    );
+    const lastNameValidation = validate(lastNameRef.current.value, "lastName");
+    const emailValidation = validate(emailRef.current.value, "email");
+    const passwordValidation = validate(passwordRef.current.value, "password");
+
+    // Verificar si alguna validación falló
+    if (
+      firstNameValidation !== "" ||
+      lastNameValidation !== "" ||
+      emailValidation !== "" ||
+      passwordValidation !== ""
+    ) {
+      // Mostrar la alerta si algún campo no pasa la validación
+      showAlertMessage("error", "Please fill in all fields correctly.");
+      return;
+    }
+
+    if (
+      firstNameRef.current.value === "" ||
+      lastNameRef.current.value === "" ||
+      emailRef.current.value === "" ||
+      passwordRef.current.value === "" ||
+      birthdayRef.current.value === "" ||
+      roleRef.current.value === ""
+    ) {
+      showAlertMessage("error", "Please fill in all required fields.");
+      setAllFieldsFilled(false);
+      return;
+    }
     let user = {
       firstName: firstNameRef.current.value,
       lastName: lastNameRef.current.value,
@@ -71,7 +119,7 @@ export default function FormRegister({ type, onSuccessRedirect }) {
     };
 
     if (type === "create") {
-      user = { ...user, password: passwordRef.current.value};
+      user = { ...user, password: passwordRef.current.value };
       await addDoc(refCreate, user);
       showAlertMessage("success", "User created successfully.");
       navigate("/", { replace: true });
@@ -114,6 +162,7 @@ export default function FormRegister({ type, onSuccessRedirect }) {
       const dataUser = await getDoc(ref);
       if (dataUser.exists()) {
         const responseUser = { ...dataUser.data() };
+        console.log(responseUser);
         setUser(responseUser); // Actualizar el estado del usuario
         setUserLoaded(true);
       } else {
@@ -143,6 +192,55 @@ export default function FormRegister({ type, onSuccessRedirect }) {
   //   setUserType(event.target.value);
   // };
 
+  //validation sign up
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const handleFirstNameChange = (event) => {
+    setFirstNameError(validate(event.target.value, "firstName"));
+  };
+
+  const handleLastNameChange = (event) => {
+    setLastNameError(validate(event.target.value, "lastName"));
+  };
+
+  const handleEmailChange = (event) => {
+    setEmailError(validate(event.target.value, "email"));
+  };
+
+  const handlePasswordChange = (event) => {
+    setPasswordError(validate(event.target.value, "password"));
+  };
+
+  const validate = (value, type) => {
+    if (type === "firstName") {
+      if (!/^[a-zA-Z\s]+$/.test(value)) {
+        return "First name must be a string without numbers.";
+      }
+    }
+
+    if (type === "lastName") {
+      if (!/^[a-zA-Z\s]+$/.test(value)) {
+        return "Last name must be a string without numbers.";
+      }
+    }
+
+    if (type === "email") {
+      if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(value)) {
+        return "Email must be a valid email address.";
+      }
+    }
+
+    if (type === "password") {
+      if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/.test(value)) {
+        return "Password must have at least one number, one lowercase letter, one uppercase letter, and be at least 6 characters long.";
+      }
+    }
+
+    return "";
+  };
   return (
     <>
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
@@ -168,6 +266,9 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                   label="First Name"
                   autoFocus
                   inputRef={firstNameRef}
+                  error={firstNameError !== ""}
+                  helperText={firstNameError}
+                  onChange={handleFirstNameChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -181,6 +282,9 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                   name="lastName"
                   autoComplete="family-name"
                   inputRef={lastNameRef}
+                  error={lastNameError !== ""}
+                  helperText={lastNameError}
+                  onChange={handleLastNameChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -195,6 +299,9 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                   autoComplete="email"
                   inputRef={emailRef}
                   type="email"
+                  error={emailError !== ""}
+                  helperText={emailError}
+                  onChange={handleEmailChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -205,10 +312,25 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                     fullWidth
                     name="password"
                     label="Password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     id="password"
                     autoComplete="new-password"
                     inputRef={passwordRef}
+                    error={passwordError !== ""}
+                    helperText={passwordError}
+                    onChange={handlePasswordChange}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handlePasswordToggle}
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 )}
               </Grid>
@@ -222,7 +344,7 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                   name="birthday"
                   inputProps={{ min: maxBirthDate, max: minBirthDate }}
                   label={type !== "create" ? "Birthday" : null}
-                  type="date"
+                  type={type === "view" ? "text" : "date"} 
                   id="birthday"
                   autoComplete="birthday"
                   inputRef={birthdayRef}
@@ -232,6 +354,7 @@ export default function FormRegister({ type, onSuccessRedirect }) {
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">Role</InputLabel>
                   <Select
+                    required
                     labelId="role"
                     id="role"
                     // value={userType}
