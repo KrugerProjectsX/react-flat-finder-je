@@ -2,6 +2,7 @@ import * as React from 'react';
 import Table from '@mui/material/Table';
 import { Box} from "@mui/system";
 import TextField from "@mui/material/TextField";
+import { Slider , Typography } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -9,7 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useEffect, useState } from "react";
 import { getDocs, query, where, collection } from "firebase/firestore";
-import { db } from "../../src/Firebase";
+import { db } from "../Firebase";
 import Button from '@mui/material/Button';
 
 
@@ -21,22 +22,23 @@ export default function UsersTable() {
     const refFlats = collection(db, "flats");
     const [userType , setUserType] = useState('') ; 
     const [flatsCounter , setFlatsCounter] = useState(0) ; 
-    const [age , setAge] = useState(0) ;
-    
-
+    const [valueSlider, setValueSlider] = React.useState([18, 120]);
     const [users, setUsers] = useState([]);
-
-    const getData = async () => {
-        let arrayWhere = []
-       
-       
-        if(userType){
-            arrayWhere.push(where('role', '==' , userType))
+    let arrayWhere = []
+    
+    
+    if(userType){
+        arrayWhere.push(where('role', '==' , userType))
+    }
+    const today = new Date();
+        const minBirthDate = new Date(today.getFullYear() - valueSlider[0], today.getMonth(), today.getDate()).toISOString().split('T')[0];
+        const maxBirthDate = new Date(today.getFullYear() - valueSlider[1], today.getMonth(), today.getDate()).toISOString().split('T')[0];
+        if(valueSlider && valueSlider.length > 1){
+            arrayWhere.push(where('birthday' , '>=' , maxBirthDate))
+            arrayWhere.push(where('birthday' , '<=' , minBirthDate))
         }
-
+    const getData = async () => {
         let searchUsers = query(ref , ...arrayWhere) ; 
-        
-        
         const data = await getDocs(searchUsers);
         const usersSet = [];
          // Conjunto para almacenar usuarios únicos
@@ -67,13 +69,15 @@ export default function UsersTable() {
             const userWithFlats = {...item.data(), id: item.id, flats: dataFlats.docs?.length};
             usersSet.push(userWithFlats);
         }
+
         setUsers(usersSet);
+        console.log(searchUsers)
         
     };
 
     useEffect(() => {
         getData();
-    }, [userType , flatsCounter]);
+    }, [userType , flatsCounter, valueSlider]);
 
 
     return (
@@ -101,23 +105,21 @@ export default function UsersTable() {
                     <option key={ '400-500' } value={ '30-61' }> 30 - 61 </option>
                     <option key={ '1000' } value={ '61+' }> 61+ </option> 
           </TextField><br/><br/>
-          <TextField select label={ 'Area Size Range' } 
-          variant="outlined" 
-          SelectProps={ { native: true } } 
-          value={age}
-          onChange={(e)=> setAge(e.target.value)}>
-                    <option key={ 'none' } value={ '' }></option>
-                    <option key={ '100-200' } value={ '100-200' }> 100 - 200</option>
-                    <option key={ '200-300' } value={ '201-300' }> 200 - 300 </option>
-                    <option key={ '300-400' } value={ '301-400' }> 300 - 400 </option>
-                    <option key={ '400-500' } value={ '401-500' }> 400 - 500 </option>
-                    <option key={ '500-600' } value={ '501-600' }> 500 - 600 </option>
-                    <option key={ '600-700' } value={ '601-700' }> 600 - 700 </option>
-                    <option key={ '700-800' } value={ '701-800' }> 700 - 800 </option>
-                    <option key={ '800-900' } value={ '801-900' }> 800 - 900 </option>
-                    <option key={ '900-1000' } value={ '901-1000' }> 900 - 1000 </option>
-                    <option key={ '1000' } value={ '+1000' }> + 1000 </option> 
-          </TextField><br/><br/>
+          {<div className={'w-56 my-6'}>
+                    <Typography id="input-slider" gutterBottom>
+                        Age
+                    </Typography>
+                    <Slider
+                        max={120}
+                        min={18}
+                        step={10}
+                        value={valueSlider}
+                        onChange={(e,newValue)=>setValueSlider(newValue)}
+                        getAriaLabel={() => 'Age Range'}
+                        valueLabelDisplay="auto"
+                        className="flex-grow"
+                    />
+                </div>}
       </Box>
         <TableContainer>
             <Table className="min-w-full divide-y divide-gray-200" aria-label="simple table">
