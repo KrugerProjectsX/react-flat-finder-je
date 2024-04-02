@@ -138,48 +138,60 @@ const addFavorite = async (id) =>{
   
   return (
     <>
-      { type === 'all-flats' && <Box textAlign={'center'} sx={{width: '60%' , marginLeft: '20%'}} component={'form'}>
-          <TextField 
-          label='City'   
-          variant='outlined' 
-          value={city}
-          onChange={(e)=> setCity(e.target.value)}
-          /><br/><br/>
-          <TextField select label={ 'Area Size Range' } 
-          variant="outlined" 
-          SelectProps={ { native: true } } 
-          value={areaSize}
-          onChange={(e)=> setAreaSize(e.target.value)}>
-                    <option key={ 'none' } value={ '' }></option>
-                    <option key={ '100-200' } value={ '100-200' }> 100 - 200</option>
-                    <option key={ '200-300' } value={ '201-300' }> 200 - 300 </option>
-                    <option key={ '300-400' } value={ '301-400' }> 300 - 400 </option>
-                    <option key={ '400-500' } value={ '401-500' }> 400 - 500 </option>
-                    <option key={ '500-600' } value={ '501-600' }> 500 - 600 </option>
-                    <option key={ '600-700' } value={ '601-700' }> 600 - 700 </option>
-                    <option key={ '700-800' } value={ '701-800' }> 700 - 800 </option>
-                    <option key={ '800-900' } value={ '801-900' }> 800 - 900 </option>
-                    <option key={ '900-1000' } value={ '901-1000' }> 900 - 1000 </option>
-                    <option key={ '1000' } value={ '+1000' }> + 1000 </option> 
-          </TextField><br/><br/>
-          <TextField select label={ 'Area Size Range' } 
-          variant="outlined" 
-          SelectProps={ { native: true } } 
-          value={rentPrice}
-          onChange={(e)=> setRentPrice(e.target.value)}>
-                    <option key={ 'none' } value={ '' }></option>
-                    <option key={ '100-200' } value={ '100-200' }> 100 - 200</option>
-                    <option key={ '200-300' } value={ '201-300' }> 200 - 300 </option>
-                    <option key={ '300-400' } value={ '301-400' }> 300 - 400 </option>
-                    <option key={ '400-500' } value={ '401-500' }> 400 - 500 </option>
-                    <option key={ '500-600' } value={ '501-600' }> 500 - 600 </option>
-                    <option key={ '600-700' } value={ '601-700' }> 600 - 700 </option>
-                    <option key={ '700-800' } value={ '701-800' }> 700 - 800 </option>
-                    <option key={ '800-900' } value={ '801-900' }> 800 - 900 </option>
-                    <option key={ '900-1000' } value={ '901-1000' }> 900 - 1000 </option>
-                    <option key={ '1000' } value={ '+1000' }> + 1000 </option> 
-          </TextField><br/><br/>
-      </Box> }
+      { type === 'all-flats' && <Box textAlign={'center'} sx={{ width: '60%', marginLeft: '20%', marginTop: '50px' }} component={'form'} boxShadow={3} p={4} borderRadius={4}>
+  <TextField 
+    label='City'   
+    variant='outlined' 
+    value={city}
+    onChange={(e)=> setCity(e.target.value)}
+    fullWidth
+    sx={{ marginBottom: '20px' }}
+  />
+  <TextField 
+    select 
+    label={ 'Area Size Range' } 
+    variant="outlined" 
+    SelectProps={{ native: true }} 
+    value={areaSize}
+    onChange={(e)=> setAreaSize(e.target.value)}
+    fullWidth
+    sx={{ marginBottom: '20px' }}
+  >
+    <option key={ 'none' } value={ '' }></option>
+    <option key={ '100-200' } value={ '100-200' }> 100 - 200</option>
+    <option key={ '200-300' } value={ '201-300' }> 200 - 300 </option>
+    <option key={ '300-400' } value={ '301-400' }> 300 - 400 </option>
+    <option key={ '400-500' } value={ '401-500' }> 400 - 500 </option>
+    <option key={ '500-600' } value={ '501-600' }> 500 - 600 </option>
+    <option key={ '600-700' } value={ '601-700' }> 600 - 700 </option>
+    <option key={ '700-800' } value={ '701-800' }> 700 - 800 </option>
+    <option key={ '800-900' } value={ '801-900' }> 800 - 900 </option>
+    <option key={ '900-1000' } value={ '901-1000' }> 900 - 1000 </option>
+    <option key={ '1000' } value={ '+1000' }> + 1000 </option> 
+  </TextField>
+  <TextField 
+    select 
+    label={ 'Rent Price Range' } 
+    variant="outlined" 
+    SelectProps={{ native: true }} 
+    value={rentPrice}
+    onChange={(e)=> setRentPrice(e.target.value)}
+    fullWidth
+    sx={{ marginBottom: '20px' }}
+  >
+    <option key={ 'none' } value={ '' }></option>
+    <option key={ '100-200' } value={ '100-200' }> 100 - 200</option>
+    <option key={ '200-300' } value={ '201-300' }> 200 - 300 </option>
+    <option key={ '300-400' } value={ '301-400' }> 300 - 400 </option>
+    <option key={ '400-500' } value={ '401-500' }> 400 - 500 </option>
+    <option key={ '500-600' } value={ '501-600' }> 500 - 600 </option>
+    <option key={ '600-700' } value={ '601-700' }> 600 - 700 </option>
+    <option key={ '700-800' } value={ '701-800' }> 700 - 800 </option>
+    <option key={ '800-900' } value={ '801-900' }> 800 - 900 </option>
+    <option key={ '900-1000' } value={ '901-1000' }> 900 - 1000 </option>
+    <option key={ '1000' } value={ '+1000' }> + 1000 </option> 
+  </TextField>
+</Box> } <br/><br/><br/>
       <TableContainer sx={{ width: "80%" , marginLeft: '10%' }} >
         <Table aria-label="customized table">
           <TableHead>
