@@ -1,15 +1,13 @@
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { doc, updateDoc, addDoc, getDoc, collection } from "firebase/firestore";
-import { db } from "../Firebase";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
-import { useNavigate } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -17,6 +15,8 @@ import Select from "@mui/material/Select";
 import { InputAdornment, IconButton } from "@mui/material";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
+import { doc, updateDoc, addDoc, getDoc, collection } from "firebase/firestore";
+import { db } from "../Firebase";
 
 export default function FormRegister({ type, onSuccessRedirect, userId }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,26 +37,31 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
 
   const currentDate = new Date().toISOString().slice(0, 10);
   const [userLoaded, setUserLoaded] = useState(false);
+  const [user, setUser] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    birthday: "",
+    role: ""
+  });
+
   const firstNameRef = useRef("");
   const lastNameRef = useRef("");
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const birthdayRef = useRef(currentDate);
   const roleRef = useRef("");
-  
 
   let ref = null;
-  if (userId===null && type !== "create"){
-    userId=JSON.parse(localStorage.getItem("user_logged")); 
-   
+  if (userId === null && type !== "create") {
+    userId = JSON.parse(localStorage.getItem("user_logged"));
   }
-  if (userId && type !== "create"){
-     ref = doc(db, "users", userId);
+  if (userId && type !== "create") {
+    ref = doc(db, "users", userId);
   }
 
   const refCreate = collection(db, "users");
-  
- 
 
   const today = new Date();
   const minBirthDate = new Date(
@@ -83,56 +88,59 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
     );
     const lastNameValidation = validate(lastNameRef.current.value, "lastName");
     const emailValidation = validate(emailRef.current.value, "email");
-    const passwordValidation = validate(passwordRef.current.value, "password");
 
     // Verificar si alguna validación falló
     if (
       firstNameValidation !== "" ||
       lastNameValidation !== "" ||
-      emailValidation !== "" ||
-      passwordValidation !== ""
+      emailValidation !== "" 
     ) {
       // Mostrar la alerta si algún campo no pasa la validación
       showAlertMessage("error", "Please fill in all fields correctly.");
       return;
     }
 
-    if (
-      firstNameRef.current.value === "" ||
-      lastNameRef.current.value === "" ||
-      emailRef.current.value === "" ||
-      passwordRef.current.value === "" ||
-      birthdayRef.current.value === "" ||
-      roleRef.current.value === ""
-    ) {
-      showAlertMessage("error", "Please fill in all required fields.");
-      setAllFieldsFilled(false);
-      return;
-    }
-    let user = {
-      firstName: firstNameRef.current.value,
-      lastName: lastNameRef.current.value,
-      email: emailRef.current.value,
-      password: passwordRef.current.value,
-      birthday: birthdayRef.current.value,
-      role: roleRef.current.value,
-    };
-
     if (type === "create") {
+      if (
+        firstNameRef.current.value === "" ||
+        lastNameRef.current.value === "" ||
+        emailRef.current.value === "" ||
+        passwordRef.current.value === "" ||
+        birthdayRef.current.value === "" ||
+        roleRef.current.value === ""
+      ) {
+        showAlertMessage("error", "Please fill in all required fields.");
+        setAllFieldsFilled(false);
+        return;
+      }
+      let user = {
+        firstName: firstNameRef.current.value,
+        lastName: lastNameRef.current.value,
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+        birthday: birthdayRef.current.value,
+        role: roleRef.current.value,
+      };
+
       user = { ...user, password: passwordRef.current.value };
       await addDoc(refCreate, user);
+      
       showAlertMessage("success", "User created successfully.");
       navigate("/", { replace: true });
       console.log(user);
     }
     if (type === "update") {
       await updateDoc(ref, {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        birthday: user.birthday,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      birthday: user.birthday,
+      role: user.role,
       });
       showAlertMessage("success", "Profile updated successfully.");
+      setTimeout(() => {
+      navigate("/dashboard", { replace: true });
+      }, 2000);
     }
     if (type === "view") {
       console.log(user);
@@ -148,14 +156,6 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
   if (type === "create") {
     nameButton = "Sign Up";
   }
-
-  const [user, setUser] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    birthday: "",
-  });
 
   const getUserData = async () => {
     try {
@@ -186,12 +186,6 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
     processData();
   }, []);
 
-  // const [ userType,  setUserType] = React.useState('');
-
-  // const handleChange = (event) => {
-  //   setUserType(event.target.value);
-  // };
-
   //validation sign up
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
@@ -200,18 +194,34 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
 
   const handleFirstNameChange = (event) => {
     setFirstNameError(validate(event.target.value, "firstName"));
+    setUser((prevState) => ({
+      ...prevState,
+      firstName: event.target.value,
+    }));
   };
 
   const handleLastNameChange = (event) => {
     setLastNameError(validate(event.target.value, "lastName"));
+    setUser((prevState) => ({
+      ...prevState,
+      lastName: event.target.value,
+    }));
   };
 
   const handleEmailChange = (event) => {
     setEmailError(validate(event.target.value, "email"));
+    setUser((prevState) => ({
+      ...prevState,
+      email: event.target.value,
+    }));
   };
 
   const handlePasswordChange = (event) => {
     setPasswordError(validate(event.target.value, "password"));
+    setUser((prevState) => ({
+      ...prevState,
+      password: event.target.value,
+    }));
   };
 
   const validate = (value, type) => {
@@ -340,11 +350,15 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
                   required
                   fullWidth
                   disabled={type === "view"}
-                  defaultValue={user.birthday}
+                  defaultValue={
+                    user.birthday
+                      ? new Date(user.birthday).toISOString().slice(0, 10)
+                      : ""
+                  }
                   name="birthday"
                   inputProps={{ min: maxBirthDate, max: minBirthDate }}
-                  label={type !== "create" ? "Birthday" : null}
-                  type={type === "view" ? "text" : "date"} 
+                  label={type === "update" || "create" ? null : "Birthday"}
+                  type={type === "view" ? "text" : "date"}
                   id="birthday"
                   autoComplete="birthday"
                   inputRef={birthdayRef}
@@ -361,9 +375,12 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
                     label="role"
                     // onChange={handleChange}
                     inputRef={roleRef}
+                    value={user.role}
+                    onChange={(e) => setUser({...user, role: e.target.value})} 
                   >
                     <MenuItem value={"landlord"}>Landlord</MenuItem>
                     <MenuItem value={"renter"}>Renter</MenuItem>
+          
                   </Select>
                 </FormControl>
               </Grid>
