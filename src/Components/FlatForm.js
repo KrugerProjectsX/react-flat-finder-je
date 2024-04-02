@@ -37,31 +37,32 @@ const FlatForm = () =>{
     }
 
     return(
-    <Box onSubmit={handleSubmit} sx={{marginLeft:'30%', width:'40%' ,  marginTop:'2.5%', textAlign: 'center'}} component={'form'}>
-        <Typography fontWeight={'bold'} component={'h2'}>Create Your Flat</Typography><br></br>
-        <Box display={'flex'}>
-        <TextField label='City' inputRef={city} variant='outlined'/><br/><br/>
-        <TextField label='Street name' inputRef={streetName}  variant='outlined'/>
-        </Box><br/><br/>
-        <Box display={'flex'}>
-        <TextField label='Street number'  inputRef={streetNumber}  variant='outlined'/>
-        <TextField label='Area size' type='number' inputRef={areaSize}  variant='outlined'/>
-        </Box><br/><br/>
-        <Box display={'flex'}>
-        <div>
-      <Switch
-        inputRef={hasAC}
-      />
-      <label htmlFor='switch'>Has AC</label>
-    </div>
-        <TextField label='Year built' type='number' inputProps={{min: 1900 , max:2050}} inputRef={yearBuilt} variant='outlined'/>
-        </Box><br/><br/>
-        <Box display={'flex'}>
-        <TextField label='Rent price' type='number' inputRef={rentPrice}  variant='outlined'/>
-        <TextField  type='date' label='Date available' defaultValue={date} inputRef={dateAvailable}  variant='outlined'/>
-        </Box><br/><br/>
-        <Button type='submit'>Add Flat</Button>
-    </Box>)
+        <Box className="mx-auto mt-10 sm:w-2/5 bg-gray-100 p-6 rounded-lg shadow-lg">
+        <h2 className="font-bold text-center mb-4">Create Your Flat</h2>
+        <div className="flex mb-4">
+          <TextField label="City" inputRef={city} variant="outlined" className="w-1/2 mr-2" />
+          <TextField label="Street name" inputRef={streetName} variant="outlined" className="w-1/2" />
+        </div>
+        <div className="flex mb-4">
+          <TextField label="Street number" inputRef={streetNumber} variant="outlined" className="w-1/2 mr-2" />
+          <TextField label="Area size" type="number" inputRef={areaSize} variant="outlined" className="w-1/2" />
+        </div>
+        <div className="flex mb-4 items-center">
+          <div>
+            <Switch inputRef={hasAC} />
+            <label htmlFor="switch" className="ml-2">Has AC</label>
+          </div>
+          <TextField label="Year built" type="number" inputProps={{min: 1900, max: 2050}} inputRef={yearBuilt} variant="outlined" className="w-1/2 ml-4" />
+        </div>
+        <div className="flex mb-4">
+          <TextField label="Rent price" type="number" inputRef={rentPrice} variant="outlined" className="w-1/2 mr-2" />
+          <TextField type="date" label="Date available" defaultValue={date} inputRef={dateAvailable} variant="outlined" className="w-1/2" />
+        </div>
+        <Button type="submit" className="w-full">Add Flat</Button>
+      </Box>
+      
+
+      )
 }
 
 export {FlatForm} ;
