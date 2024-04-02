@@ -193,6 +193,7 @@ const addFavorite = async (id) =>{
               <StyledTableCell align="center">Rent Price</StyledTableCell>
               <StyledTableCell align="center">Date Available</StyledTableCell>
               <StyledTableCell align="center">Favorite</StyledTableCell>
+              <StyledTableCell align="center">View</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -215,6 +216,9 @@ const addFavorite = async (id) =>{
                 {type ==='favorite-flats' && <StyledTableCell align="center">
                   {<Button onClick={()=>removeFavorite(row.id)}  >Remove Favorite</Button>}
                 </StyledTableCell> }
+                <StyledTableCell align="center"><Button href={`/flat/${row.id}`} >View</Button>
+                                {type === 'my-flats' && <Button href={`/flats/edit/${row.id}`} >Edit</Button>}</StyledTableCell>
+               
               </StyledTableRow>
             ))}
           </TableBody>
