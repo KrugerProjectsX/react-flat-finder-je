@@ -344,7 +344,7 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
                   name="birthday"
                   inputProps={{ min: maxBirthDate, max: minBirthDate }}
                   label={type !== "create" ? "Birthday" : null}
-                  type={type === "view" ? "text" : "date"} 
+                  type={type === "view"|| "update" ? "text" : "date"} 
                   id="birthday"
                   autoComplete="birthday"
                   inputRef={birthdayRef}

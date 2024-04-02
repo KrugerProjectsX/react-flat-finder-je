@@ -9,7 +9,7 @@ import UpdateProfile from './pages/UpdateProfile'
 import Profile from './pages/Profile';
 import Users from './pages/Users';
 import { MyFlats } from './pages/MyFlats';
-
+import Flats from './pages/Flat';
 
 
 function App() {
@@ -26,6 +26,10 @@ function App() {
       <Route path ={"/update-profile/:userId"} element ={<UpdateProfile/>} />
       <Route path ={"/users"} element ={<Users/>} />
       <Route path ={'my-flats'} element ={<MyFlats/>}/>
+      {/* <Route path ={'flat'} element ={<Flats/>}/> */}
+      <Route path ={'flat/:id'} element ={<Flats/>}/>
+      <Route path ={'flat/update/:id'} element ={<MyFlats/>}/>
+
       
     </Routes> 
   
