@@ -72,10 +72,10 @@ const getData = async () =>{
       for (const item of data.docs){
         const refFlat = doc(db, 'flats' , item.data().flatId)
         const dataFlat = await getDoc(refFlat) ; 
-        allFlats.push({...dataFlat.data() , id: dataFlat.id})
+        allFlats.push({...dataFlat.data() , id: dataFlat.id , favorite: item.id})
       }
       setFlats(allFlats)
-    console.log(flats)
+
     }
     if(type === 'all-flats'){
       if(city){
@@ -226,10 +226,10 @@ const addFavorite = async (id) =>{
                   {row.favorite && <Button onClick={()=>removeFavorite(row.favorite)}  >Remove Favorite</Button>}
                   </StyledTableCell> }
                 {type ==='favorite-flats' && <StyledTableCell align="center">
-                  {<Button onClick={()=>removeFavorite(row.id)}  >Remove Favorite</Button>}
+                  {<Button onClick={()=>removeFavorite(row.favorite)}  >Remove Favorite</Button>}
                 </StyledTableCell> }
                 <StyledTableCell align="center"><Button href={`/flat/${row.id}`} >View</Button>
-                                {type === 'my-flats' && <Button href={`/flats/edit/${row.id}`} >Edit</Button>}</StyledTableCell>
+                                {type === 'my-flats' && <Button href={`/flat/edit/${row.id}`} >Edit</Button>}</StyledTableCell>
                
               </StyledTableRow>
             ))}
