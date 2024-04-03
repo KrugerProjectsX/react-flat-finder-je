@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import { Box} from "@mui/system";
-import { Button } from "@mui/base";
+import Button from '@mui/material/Button';
 import { useState } from "react"
 import { useEffect } from "react";
 import { db } from "../Firebase";
@@ -222,14 +222,14 @@ const addFavorite = async (id) =>{
                 <StyledTableCell align="center">{row.rentPrice}</StyledTableCell>
                 <StyledTableCell align="center">{row.dateAvailable}</StyledTableCell>
                 {type ==='all-flats' && <StyledTableCell align="center">
-                  {!row.favorite && <Button onClick={()=>addFavorite(row.id)}  >Add Favorite</Button>}
-                  {row.favorite && <Button onClick={()=>removeFavorite(row.favorite)}  >Remove Favorite</Button>}
+                  {!row.favorite && <Button variant="outlined" onClick={()=>addFavorite(row.id)}  >Add Favorite</Button>}
+                  {row.favorite && <Button variant="outlined" onClick={()=>removeFavorite(row.favorite)}  >Remove Favorite</Button>}
                   </StyledTableCell> }
                 {type ==='favorite-flats' && <StyledTableCell align="center">
-                  {<Button onClick={()=>removeFavorite(row.favorite)}  >Remove Favorite</Button>}
+                  {<Button variant="outlined" onClick={()=>removeFavorite(row.id)}  >Remove Favorite</Button>}
                 </StyledTableCell> }
-                <StyledTableCell align="center"><Button href={`/flat/${row.id}`} >View</Button>
-                                {type === 'my-flats' && <Button href={`/flat/edit/${row.id}`} >Edit</Button>}</StyledTableCell>
+                <StyledTableCell align="center"><Button variant="contained" href={`/flat/${row.id}`} >View</Button>
+                                {type === 'my-flats' && <Button href={`/flats/edit/${row.id}`} >Edit</Button>}</StyledTableCell>
                
               </StyledTableRow>
             ))}
