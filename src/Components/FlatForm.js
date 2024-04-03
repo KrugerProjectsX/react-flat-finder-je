@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 export default function FlatForm({type, id}){
     const [flatLoaded, setFlatLoaded] = useState(false);
     const currentDate = new Date().toJSON().slice(0, 10);
-    const flatsRef = collection(db , 'flats')
     const [flat, setFlat] = useState(
         {
             city: '',
