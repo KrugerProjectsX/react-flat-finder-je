@@ -16,16 +16,21 @@
   import HomeWorkIcon from '@mui/icons-material/HomeWork';
   import FavoriteIcon from '@mui/icons-material/Favorite';
   import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+  import BuildIcon from '@mui/icons-material/Build';
+  import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+  import CorporateFareIcon from '@mui/icons-material/CorporateFare';
+  import PageviewIcon from '@mui/icons-material/Pageview';
 
   export default function MenuTransitions({ user, setUser }) {
     const navigate = useNavigate();
+    const userId = parseInt(localStorage.getItem("user_logged"));
 
     const logout = () => {
       // Remove user information from localStorage
       localStorage.removeItem("user_logged");
       setUser("");
       // Redirect to the login page
-      navigate("/", { replace: true });
+      navigate("/", { replace: false });
     };
 
     const createHandleMenuClick = (menuItem) => {
@@ -46,7 +51,16 @@
           navigate("/users");
         }
         if (menuItem === "MyFlats") {
-          navigate("/dashboard");
+          navigate("/my-flats");
+        }
+        if (menuItem === "Favorites") {
+          navigate("/favorite-flats");
+        }
+        if (menuItem === "AddNewFlat") {
+          navigate("/add-new-flat");
+        }
+        if (menuItem === "FlatEdit") {
+          navigate(`/view-flat/edit/:${userId}`);
         }
       };
     };
@@ -85,22 +99,32 @@
         <Menu slots={{ listbox: AnimatedListbox }}  
         
         >
+          <MenuItem onClick={createHandleMenuClick("Home")}>
+            <HomeIcon /> Home
+          </MenuItem> 
           <MenuItem onClick={createHandleMenuClick("Profile")}>
             <ManageAccountsIcon /> My Profile
           </MenuItem>
           <MenuItem onClick={createHandleMenuClick("UpdateProfile")}>
             <SettingsIcon />
             Update Profile
-          </MenuItem>
-          <MenuItem onClick={createHandleMenuClick("Home")}>
-            <HomeIcon /> Home
-          </MenuItem>   
+          </MenuItem>  
           {user && (user.role === "landlord" || user.role === "admin") && (<MenuItem onClick={createHandleMenuClick("Users")}>
             <PeopleAltIcon /> Users
           </MenuItem>)}   
           <MenuItem onClick={createHandleMenuClick("Favorites")}>
             <FavoriteIcon /> Favorites
           </MenuItem>  
+          <MenuItem onClick={createHandleMenuClick("MyFlats")}>
+            <CorporateFareIcon /> My Flats
+          </MenuItem>  
+          <MenuItem onClick={createHandleMenuClick("AddNewFlat")}>
+            <AddBusinessIcon /> Add new flat
+          </MenuItem> 
+         
+          <MenuItem onClick={createHandleMenuClick("FlatEdit")}>
+            <BuildIcon /> Flat edit
+          </MenuItem> 
           <MenuItem onClick={createHandleMenuClick("Log out")}>
             <ExitToAppIcon /> Log out
           </MenuItem>
