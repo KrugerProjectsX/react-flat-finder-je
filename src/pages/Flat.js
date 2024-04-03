@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import FlatForm from "../components/FlatForm";
 import Messages from "../components/Messages";
 
-export default function Flat() {
+export default function ViewFlat() {
     let { id }  = useParams();
     
     return (
