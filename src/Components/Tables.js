@@ -72,10 +72,10 @@ const getData = async () =>{
       for (const item of data.docs){
         const refFlat = doc(db, 'flats' , item.data().flatId)
         const dataFlat = await getDoc(refFlat) ; 
-        allFlats.push({...dataFlat.data() , id: dataFlat.id})
+        allFlats.push({...dataFlat.data() , id: dataFlat.id , favorite: item.id})
       }
       setFlats(allFlats)
-    console.log(flats)
+
     }
     if(type === 'all-flats'){
       if(city){

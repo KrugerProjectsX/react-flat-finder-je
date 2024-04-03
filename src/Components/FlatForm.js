@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import { Button, Switch, TextField, Typography } from '@mui/material';
-import { addDoc, collection,  doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection,  doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from "../Firebase";
 import {useEffect, useRef, useState} from "react";
 import { useNavigate } from "react-router-dom";
@@ -35,29 +35,12 @@ export default function FlatForm({type, id}){
     const dateAvailable = useRef('')
     const ref = collection(db, "flats");
     let refFlat = null;
+    console.log(id , type)
     if (id && type !== 'create') {
         refFlat = doc(db, "flats", id);
-    }   
-    const handleSubmit = async (e)=>{
-        e.preventDefault();
-        await addDoc(flatsRef , {
-            city : city.current.value,
-            streetName : streetName.current.value ,
-            streetNumber : streetNumber.current.value , 
-            areaSize : areaSize.current.value , 
-            hasAC : hasAC.current.checked , 
-            yearBuilt : yearBuilt.current.value , 
-            rentPrice : rentPrice.current.value , 
-            dateAvailable : dateAvailable.current.value , 
-            user: JSON.parse (localStorage.getItem('user_logged'))
-        })
-        if (type === 'create') {
-            await addDoc(ref, flat);
-            navigate('/flats', { replace: false });
-        }
-
-    }
+    } 
     const getFlatData = async () => {
+        console.log(refFlat)
         const dataFlat = await getDoc(refFlat);
         const responseFlat = { ...dataFlat.data() };
         setFlat(responseFlat);
@@ -69,7 +52,29 @@ export default function FlatForm({type, id}){
         }else{
             setFlatLoaded(true)
         }
+    }  
+    const handleSubmit = async (e)=>{
+        e.preventDefault();
+        let flatSend = {
+            city : city.current.value,
+            streetName : streetName.current.value ,
+            streetNumber : streetNumber.current.value , 
+            areaSize : areaSize.current.value , 
+            hasAC : hasAC.current.checked , 
+            yearBuilt : yearBuilt.current.value , 
+            rentPrice : rentPrice.current.value , 
+            dateAvailable : dateAvailable.current.value , 
+            user: JSON.parse (localStorage.getItem('user_logged'))
+        }
+        if (type === 'create') {
+            await addDoc(ref, flatSend);
+        }
+        if(type === 'update'){
+          await updateDoc(refFlat , flatSend)
+        }
+
     }
+    
 
     useEffect(() => {
         processData();
@@ -103,7 +108,7 @@ export default function FlatForm({type, id}){
         <TextField defaultValue={flat.rentPrice} disabled={type === 'view'} label='Rent price' type='number' inputRef={rentPrice}  variant='outlined'/>
         <TextField disabled={type === 'view'} defaultValue={flat.dateAvailable}  type='date' label='Date available' defaultValue={date} inputRef={dateAvailable}  variant='outlined'/>
         </Box><br/><br/>
-        { type ==='create' && <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        { type !=='view' && <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Add Flat
                 </Button> } 
                 {/*TODO: Add the update button*/}
