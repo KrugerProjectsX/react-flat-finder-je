@@ -23,6 +23,7 @@
 
   export default function MenuTransitions({ user, setUser }) {
     const navigate = useNavigate();
+    const userId = parseInt(localStorage.getItem("user_logged"));
 
     const logout = () => {
       // Remove user information from localStorage
@@ -92,12 +93,16 @@
         <Menu slots={{ listbox: AnimatedListbox }}  
         
         >
+          <MenuItem onClick={createHandleMenuClick("Home")}>
+            <HomeIcon /> Home
+          </MenuItem> 
           <MenuItem onClick={createHandleMenuClick("Profile")}>
             <ManageAccountsIcon /> My Profile
           </MenuItem>
           <MenuItem onClick={createHandleMenuClick("UpdateProfile")}>
             <SettingsIcon />
             Update Profile
+
           </MenuItem>
           <MenuItem onClick={createHandleMenuClick("Home")}>
             <HomeIcon /> Home
@@ -111,9 +116,6 @@
           <MenuItem onClick={createHandleMenuClick("MyFlats")}>
             <CorporateFareIcon /> My Flats
           </MenuItem>  
-         
-
-          
           <MenuItem onClick={createHandleMenuClick("Log out")}>
             <ExitToAppIcon /> Log out
           </MenuItem>

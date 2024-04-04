@@ -7,6 +7,7 @@ import {doc, getDoc} from "firebase/firestore";
 import {db} from "../Firebase";
 import {getUser, getUserLogged} from "../services/users";
 import ApartmentIcon from '@mui/icons-material/Apartment';
+import { Box } from '@mui/material';
 
 
 export default function Header() {
@@ -28,7 +29,7 @@ export default function Header() {
     }, [])
     
     return (
-        <div>
+        <Box sx={{width: '100%'}}>
             <AppBar position="static">
                 <Toolbar className={'bg-white flex justify-between'}>
                     <div className={' items-center '}>
@@ -40,6 +41,6 @@ export default function Header() {
                     
                 </Toolbar>
             </AppBar>
-        </div>
+        </Box>
     );
 }

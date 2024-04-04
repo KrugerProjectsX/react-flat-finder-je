@@ -229,8 +229,8 @@ const addFavorite = async (id) =>{
                   {<Button variant="outlined" onClick={()=>removeFavorite(row.id)}  >Remove Favorite</Button>}
                 </StyledTableCell> }
                 <StyledTableCell align="center"><Button variant="contained" href={`/flat/${row.id}`} >View</Button>
-                                {type === 'my-flats' && <Button href={`/flat/edit/${row.id}`} >Edit</Button>}</StyledTableCell>
-               
+                                {type === 'my-flats' && <Button href={`/flats/edit/${row.id}`} >Edit</Button>}</StyledTableCell>
+          
               </StyledTableRow>
             ))}
           </TableBody>
