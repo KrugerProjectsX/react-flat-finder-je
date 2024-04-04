@@ -56,12 +56,6 @@
         if (menuItem === "Favorites") {
           navigate("/favorite-flats");
         }
-        if (menuItem === "AddNewFlat") {
-          navigate("/add-new-flat");
-        }
-        if (menuItem === "FlatEdit") {
-          navigate(`/view-flat/edit/:${userId}`);
-        }
       };
     };
 
@@ -108,8 +102,12 @@
           <MenuItem onClick={createHandleMenuClick("UpdateProfile")}>
             <SettingsIcon />
             Update Profile
-          </MenuItem>  
-          {user && (user.role === "landlord" || user.role === "admin") && (<MenuItem onClick={createHandleMenuClick("Users")}>
+
+          </MenuItem>
+          <MenuItem onClick={createHandleMenuClick("Home")}>
+            <HomeIcon /> Home
+          </MenuItem>   
+          {user && ( user.role === "admin") && (<MenuItem onClick={createHandleMenuClick("Users")}>
             <PeopleAltIcon /> Users
           </MenuItem>)}   
           <MenuItem onClick={createHandleMenuClick("Favorites")}>
@@ -118,13 +116,6 @@
           <MenuItem onClick={createHandleMenuClick("MyFlats")}>
             <CorporateFareIcon /> My Flats
           </MenuItem>  
-          <MenuItem onClick={createHandleMenuClick("AddNewFlat")}>
-            <AddBusinessIcon /> Add new flat
-          </MenuItem> 
-         
-          <MenuItem onClick={createHandleMenuClick("FlatEdit")}>
-            <BuildIcon /> Flat edit
-          </MenuItem> 
           <MenuItem onClick={createHandleMenuClick("Log out")}>
             <ExitToAppIcon /> Log out
           </MenuItem>
