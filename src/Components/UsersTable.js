@@ -10,7 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useEffect, useState } from "react";
 import { getDocs, query, where, collection } from "firebase/firestore";
-import { db } from "../Firebase";
+import { db } from "../firebase";
 import Button from '@mui/material/Button';
 
 
@@ -24,23 +24,32 @@ export default function UsersTable() {
     const [flatsCounter , setFlatsCounter] = useState(0) ; 
     const [valueSlider, setValueSlider] = React.useState([18, 120]);
     const [users, setUsers] = useState([]);
-    let arrayWhere = []
+    
+        
     
     
-    if(userType){
-        arrayWhere.push(where('role', '==' , userType))
-    }
-    const today = new Date();
-        const minBirthDate = new Date(today.getFullYear() - valueSlider[0], today.getMonth(), today.getDate()).toISOString().split('T')[0];
-        const maxBirthDate = new Date(today.getFullYear() - valueSlider[1], today.getMonth(), today.getDate()).toISOString().split('T')[0];
-        if(valueSlider && valueSlider.length > 1){
-            arrayWhere.push(where('birthday' , '>=' , maxBirthDate))
-            arrayWhere.push(where('birthday' , '<=' , minBirthDate))
-        }
+    
+
     const getData = async () => {
-        let searchUsers = query(ref , ...arrayWhere) ; 
-        const data = await getDocs(searchUsers);
-        const usersSet = [];
+        let arrayWhere = []
+        
+
+        if(userType){
+            arrayWhere.push(where('role', '==' , userType))
+        }
+        
+        const today = new Date();
+            const minBirthDate = new Date(today.getFullYear() - valueSlider[0], today.getMonth(), today.getDate()).toISOString().split('T')[0];
+            const maxBirthDate = new Date(today.getFullYear() - valueSlider[1], today.getMonth(), today.getDate()).toISOString().split('T')[0];
+            if(valueSlider && valueSlider.length > 1){
+                arrayWhere.push(where('birthday' , '>=' , maxBirthDate))
+                arrayWhere.push(where('birthday' , '<=' , minBirthDate))
+            }
+
+    
+    let searchUsers = query(ref , ...arrayWhere) ;
+    const data = await getDocs(searchUsers);
+    const usersSet = [];
          // Conjunto para almacenar usuarios únicos
 
 
@@ -71,6 +80,8 @@ export default function UsersTable() {
         }
 
         setUsers(usersSet);
+        
+
         console.log(searchUsers)
         
     };
@@ -83,15 +94,16 @@ export default function UsersTable() {
     return (
         <>
         <Box textAlign={'center'} sx={{width: '60%' , marginLeft: '20%'}} component={'form'}>
-        <TextField select label={ 'User Type' } 
+        <TextField 
+          select label={ 'User Type' } 
           variant="outlined" 
           SelectProps={ { native: true } } 
           value={userType}
           onChange={(e)=> setUserType(e.target.value)}>
                     <option key={ 'none' } value={ '' }></option>
-                    <option key={ '100-200' } value={ 'admin' }> Admin </option>
-                    <option key={ '200-300' } value={ 'landlord' }> Landlord </option>
-                    <option key={ '300-400' } value={ 'render' }>  Renter </option> 
+                    <option key={ 'admin' } value={ 'admin' }> Admin </option>
+                    <option key={ 'landlord' } value={ 'landlord' }> Landlord </option>
+                    <option key={ 'renter' } value={ 'renter' }>  Renter </option> 
           </TextField><br/><br/>
           <TextField select label={ 'Flats Count' } 
           variant="outlined" 

@@ -16,7 +16,7 @@ import { InputAdornment, IconButton } from "@mui/material";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import { doc, updateDoc, addDoc, getDoc, collection } from "firebase/firestore";
-import { db } from "../Firebase";
+import { db } from "../firebase";
 
 export default function FormRegister({ type, onSuccessRedirect, userId }) {
   const [showPassword, setShowPassword] = useState(false);

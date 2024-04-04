@@ -4,7 +4,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import MenuTransitions from "./MenuTransition";
 import {doc, getDoc} from "firebase/firestore";
-import {db} from "../Firebase";
+import {db} from "../firebase";
 import {getUser, getUserLogged} from "../services/users";
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import { Box } from '@mui/material';

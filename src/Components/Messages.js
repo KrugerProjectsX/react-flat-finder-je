@@ -8,7 +8,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { db } from "../Firebase";
+import { db } from "../firebase";
 import { Box, Button, TextField } from "@mui/material";
 
 export default function Messages({ flatId }) {

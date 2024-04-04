@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { Button, Switch, TextField, Typography } from '@mui/material';
 import { addDoc, collection,  doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from "../Firebase";
+import { db } from "../firebase";
 import {useEffect, useRef, useState} from "react";
 import { useNavigate } from "react-router-dom";
 

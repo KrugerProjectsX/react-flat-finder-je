@@ -29,8 +29,8 @@ function App() {
       <Route path ={"/users"} element ={<Users/>} />
       <Route path ={'/my-flats'} element ={<MyFlats/>}/>
       <Route path = {'/favorite-flats'} element = {<FavoriteFlats/>}/>
-      <Route path={"/view-flat/:userId"} element={<ViewFlat/>} />
-      <Route path={"/view-flat/edit/:userId"} element={<FlatEdit/>} />
+      <Route path={"/flat/:userId"} element={<ViewFlat/>} />
+      <Route path={"/flat/edit/:userId"} element={<FlatEdit/>} />
       
     </Routes> 
   
