@@ -16,6 +16,10 @@
   import HomeWorkIcon from '@mui/icons-material/HomeWork';
   import FavoriteIcon from '@mui/icons-material/Favorite';
   import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+  import BuildIcon from '@mui/icons-material/Build';
+  import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+  import CorporateFareIcon from '@mui/icons-material/CorporateFare';
+  import PageviewIcon from '@mui/icons-material/Pageview';
 
   export default function MenuTransitions({ user, setUser }) {
     const navigate = useNavigate();
@@ -25,7 +29,7 @@
       localStorage.removeItem("user_logged");
       setUser("");
       // Redirect to the login page
-      navigate("/", { replace: true });
+      navigate("/", { replace: false });
     };
 
     const createHandleMenuClick = (menuItem) => {
@@ -46,7 +50,10 @@
           navigate("/users");
         }
         if (menuItem === "MyFlats") {
-          navigate("/dashboard");
+          navigate("/my-flats");
+        }
+        if (menuItem === "Favorites") {
+          navigate("/favorite-flats");
         }
       };
     };
@@ -95,12 +102,18 @@
           <MenuItem onClick={createHandleMenuClick("Home")}>
             <HomeIcon /> Home
           </MenuItem>   
-          {user && (user.role === "landlord" || user.role === "admin") && (<MenuItem onClick={createHandleMenuClick("Users")}>
+          {user && ( user.role === "admin") && (<MenuItem onClick={createHandleMenuClick("Users")}>
             <PeopleAltIcon /> Users
           </MenuItem>)}   
           <MenuItem onClick={createHandleMenuClick("Favorites")}>
             <FavoriteIcon /> Favorites
           </MenuItem>  
+          <MenuItem onClick={createHandleMenuClick("MyFlats")}>
+            <CorporateFareIcon /> My Flats
+          </MenuItem>  
+         
+
+          
           <MenuItem onClick={createHandleMenuClick("Log out")}>
             <ExitToAppIcon /> Log out
           </MenuItem>
