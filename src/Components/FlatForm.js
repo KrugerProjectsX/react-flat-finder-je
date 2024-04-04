@@ -77,38 +77,111 @@ export default function FlatForm({type, id}){
     },[]);
 
     return(
-    <Box onSubmit={handleSubmit} sx={{marginLeft:'30%', width:'40%' ,  marginTop:'2.5%', textAlign: 'center'}} component={'form'}>
-        {flatLoaded ? <>
-            <Typography fontWeight={'bold'} component={'h2'}>Create Your Flat</Typography><br></br>
-        <Box display={'flex'}>
-        <TextField disabled={type === 'view'} label='City' defaultValue={flat.city}  inputRef={city} variant='outlined'/><br/><br/>
-        <TextField disabled={type === 'view'} label='Street name' defaultValue={flat.streetName} inputRef={streetName}  variant='outlined'/>
-        </Box><br/><br/>
-        <Box display={'flex'}>
-        <TextField disabled={type === 'view'} label='Street number' defaultValue={flat.streetNumber}  inputRef={streetNumber}  variant='outlined'/>
-        <TextField disabled={type === 'view'} label='Area size' type='number' defaultValue={flat.areaSize} inputRef={areaSize}  variant='outlined'/>
-        </Box><br/><br/>
-        <Box display={'flex'}>
-        <div>
-      <Switch
-      disabled={type === 'view'}
-      defaultValue={flat.hasAc}
-        inputRef={hasAC}
-      />
-      <label htmlFor='switch'>Has AC</label>
-    </div>
-        <TextField defaultValue={flat.yearBuilt}  disabled={type === 'view'} label='Year built' type='number' inputProps={{min: 1900 , max:2050}} inputRef={yearBuilt} variant='outlined'/>
-        </Box><br/><br/>
-        <Box display={'flex'}>
-        <TextField defaultValue={flat.rentPrice} disabled={type === 'view'} label='Rent price' type='number' inputRef={rentPrice}  variant='outlined'/>
-        <TextField disabled={type === 'view'} defaultValue={flat.dateAvailable}  type='date' label='Date available' defaultValue={date} inputRef={dateAvailable}  variant='outlined'/>
-        </Box><br/><br/>
-        { type !=='view' && <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Submit
-                </Button> } 
-                {/*TODO: Add the update button*/}
-        </>
-        : <p>Loading...</p>
-        }
-    </Box>)
+    <Box
+  onSubmit={handleSubmit}
+  sx={{ marginLeft: '5%', marginRight: '5%', marginTop: '2.5%', textAlign: 'center' }}
+  component={'form'}
+  className="text-white"
+>
+  {flatLoaded ? (
+    <>
+      <Typography fontWeight={'bold'} component={'h2'} className="text-black text-2xl md:text-3xl lg:text-4xl">
+        Create Your Flat
+      </Typography>
+      <br />
+      <div className="flex flex-col md:flex-row lg:flex-row">
+        <TextField
+          disabled={type === 'view'}
+          label="City"
+          defaultValue={flat.city}
+          inputRef={city}
+          variant="outlined"
+          className="mb-2 md:mr-2 lg:mr-4 md:mb-0 lg:mb-0 flex-grow"
+        />
+        <TextField
+          disabled={type === 'view'}
+          label="Street name"
+          defaultValue={flat.streetName}
+          inputRef={streetName}
+          variant="outlined"
+          className="mb-2 md:ml-2 lg:ml-4 md:mb-0 lg:mb-0 flex-grow"
+        />
+      </div>
+      <br />
+      <div className="flex flex-col md:flex-row lg:flex-row">
+        <TextField
+          disabled={type === 'view'}
+          label="Street number"
+          defaultValue={flat.streetNumber}
+          inputRef={streetNumber}
+          variant="outlined"
+          className="mb-2 md:mr-2 lg:mr-4 md:mb-0 lg:mb-0 flex-grow"
+        />
+        <TextField
+          disabled={type === 'view'}
+          label="Area size"
+          type="number"
+          defaultValue={flat.areaSize}
+          inputRef={areaSize}
+          variant="outlined"
+          className="mb-2 md:ml-2 lg:ml-4 md:mb-0 lg:mb-0 flex-grow"
+        />
+      </div>
+      <br />
+      <div className="flex flex-col md:flex-row lg:flex-row">
+        <div className="flex items-center mb-2 md:mr-2 lg:mr-4 md:mb-0 lg:mb-0">
+          <Switch disabled={type === 'view'} defaultValue={flat.hasAc} inputRef={hasAC} />
+          <label htmlFor="switch" className="ml-2">
+            Has AC
+          </label>
+        </div>
+        <TextField
+          defaultValue={flat.yearBuilt}
+          disabled={type === 'view'}
+          label="Year built"
+          type="number"
+          inputProps={{ min: 1900, max: 2050 }}
+          inputRef={yearBuilt}
+          variant="outlined"
+          className="mb-2 md:ml-2 lg:ml-4 md:mb-0 lg:mb-0 flex-grow"
+        />
+      </div>
+      <br />
+      <div className="flex flex-col md:flex-row lg:flex-row">
+        <TextField
+          defaultValue={flat.rentPrice}
+          disabled={type === 'view'}
+          label="Rent price"
+          type="number"
+          inputRef={rentPrice}
+          variant="outlined"
+          className="mb-2 md:mr-2 lg:mr-4 md:mb-0 lg:mb-0 flex-grow"
+        />
+        <TextField
+          disabled={type === 'view'}
+          defaultValue={flat.dateAvailable}
+          type="date"
+          label="Date available"
+          defaultValue={date}
+          inputRef={dateAvailable}
+          variant="outlined"
+          className="mb-2 md:ml-2 lg:ml-4 md:mb-0 lg:mb-0 flex-grow"
+        />
+      </div>
+      <br />
+      {type !== 'view' && (
+        <Button
+          type="submit"
+          className="w-full bg-black hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Submit
+        </Button>
+      )}
+      {/*TODO: Add the update button*/}
+    </>
+  ) : (
+    <p>Loading...</p>
+  )}
+</Box>
+)
 }
