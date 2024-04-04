@@ -103,8 +103,8 @@ export default function FlatForm({type, id}){
         <TextField defaultValue={flat.rentPrice} disabled={type === 'view'} label='Rent price' type='number' inputRef={rentPrice}  variant='outlined'/>
         <TextField disabled={type === 'view'} defaultValue={flat.dateAvailable}  type='date' label='Date available' defaultValue={date} inputRef={dateAvailable}  variant='outlined'/>
         </Box><br/><br/>
-        { type ==='create' && <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Add Flat
+        { type !=='view' && <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Submit
                 </Button> } 
                 {/*TODO: Add the update button*/}
         </>
