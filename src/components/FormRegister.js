@@ -247,6 +247,9 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
       if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/.test(value)) {
         return "Password must have at least one number, one lowercase letter, one uppercase letter, and be at least 6 characters long.";
       }
+      if (!/(?=.*[!@#$%^&*(),.?":{}|<>])/.test(value)) {
+        return "Password must have at least one special character.";
+      }
     }
 
     return "";
@@ -369,6 +372,7 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
                   <InputLabel id="demo-simple-select-label">Role</InputLabel>
                   <Select
                     required
+                    disabled={type === "view"}
                     labelId="role"
                     id="role"
                     // value={userType}

@@ -55,6 +55,9 @@
         if (menuItem === "Favorites") {
           navigate("/favorite-flats");
         }
+        if (menuItem === "AddANewFlat") {
+          navigate("/add-new-flat");
+        }
       };
     };
 
@@ -64,7 +67,7 @@
           <div
             id="dropdownAvatarNameButton"
             data-dropdown-toggle="dropdownAvatarName"
-            className="flex items-center text-sm pe-1 font-medium rounded-full md:me-0 text-gray-900 "
+            className="flex items-center text-sm font-medium rounded-full md:me-0 text-gray-900 "
           >
             <Avatar src="/broken-image.jpg" className="m-2" />
             {user && (
@@ -92,16 +95,16 @@
         <Menu slots={{ listbox: AnimatedListbox }}  
         
         >
+          <MenuItem onClick={createHandleMenuClick("Home")}>
+            <HomeIcon /> Home
+          </MenuItem> 
           <MenuItem onClick={createHandleMenuClick("Profile")}>
             <ManageAccountsIcon /> My Profile
           </MenuItem>
           <MenuItem onClick={createHandleMenuClick("UpdateProfile")}>
             <SettingsIcon />
             Update Profile
-          </MenuItem>
-          <MenuItem onClick={createHandleMenuClick("Home")}>
-            <HomeIcon /> Home
-          </MenuItem>   
+          </MenuItem>  
           {user && ( user.role === "admin") && (<MenuItem onClick={createHandleMenuClick("Users")}>
             <PeopleAltIcon /> Users
           </MenuItem>)}   
@@ -110,6 +113,9 @@
           </MenuItem>  
           <MenuItem onClick={createHandleMenuClick("MyFlats")}>
             <CorporateFareIcon /> My Flats
+          </MenuItem>  
+          <MenuItem onClick={createHandleMenuClick("AddANewFlat")}>
+            <CorporateFareIcon /> Add a new Flat
           </MenuItem>  
          
 
