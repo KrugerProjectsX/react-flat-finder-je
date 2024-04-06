@@ -26,7 +26,7 @@ export default function UsersTable() {
     const [users, setUsers] = useState([]);
     let arrayWhere = []
     
-    
+    console.log(userType)
     if(userType){
         arrayWhere.push(where('role', '==' , userType))
     }
