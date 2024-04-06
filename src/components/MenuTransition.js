@@ -13,13 +13,10 @@
   import ExitToAppIcon from "@mui/icons-material/ExitToApp";
   import Avatar from "@mui/material/Avatar";
   import HomeIcon from '@mui/icons-material/Home';
-  import HomeWorkIcon from '@mui/icons-material/HomeWork';
   import FavoriteIcon from '@mui/icons-material/Favorite';
   import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-  import BuildIcon from '@mui/icons-material/Build';
-  import AddBusinessIcon from '@mui/icons-material/AddBusiness';
   import CorporateFareIcon from '@mui/icons-material/CorporateFare';
-  import PageviewIcon from '@mui/icons-material/Pageview';
+
 
   export default function MenuTransitions({ user, setUser }) {
     const navigate = useNavigate();
@@ -55,6 +52,9 @@
         if (menuItem === "Favorites") {
           navigate("/favorite-flats");
         }
+        if (menuItem === "AddANewFlat") {
+          navigate("/add-new-flat");
+        }
       };
     };
 
@@ -64,12 +64,13 @@
           <div
             id="dropdownAvatarNameButton"
             data-dropdown-toggle="dropdownAvatarName"
-            className="flex items-center text-sm pe-1 font-medium rounded-full md:me-0 text-gray-900 "
+            className="flex items-center text-sm font-medium rounded-full md:me-0 text-gray-900 "
           >
             <Avatar src="/broken-image.jpg" className="m-2" />
             {user && (
               <span>
-                {user.firstName} {user.lastName}
+                {user.firstName} {user.lastName} <br>
+                </br>{user.email}
               </span>
             )}
             <svg
@@ -92,16 +93,16 @@
         <Menu slots={{ listbox: AnimatedListbox }}  
         
         >
+          <MenuItem onClick={createHandleMenuClick("Home")}>
+            <HomeIcon /> Home
+          </MenuItem> 
           <MenuItem onClick={createHandleMenuClick("Profile")}>
             <ManageAccountsIcon /> My Profile
           </MenuItem>
           <MenuItem onClick={createHandleMenuClick("UpdateProfile")}>
             <SettingsIcon />
             Update Profile
-          </MenuItem>
-          <MenuItem onClick={createHandleMenuClick("Home")}>
-            <HomeIcon /> Home
-          </MenuItem>   
+          </MenuItem>  
           {user && ( user.role === "admin") && (<MenuItem onClick={createHandleMenuClick("Users")}>
             <PeopleAltIcon /> Users
           </MenuItem>)}   
@@ -110,6 +111,9 @@
           </MenuItem>  
           <MenuItem onClick={createHandleMenuClick("MyFlats")}>
             <CorporateFareIcon /> My Flats
+          </MenuItem>  
+          <MenuItem onClick={createHandleMenuClick("AddANewFlat")}>
+            <CorporateFareIcon /> Add a new Flat
           </MenuItem>  
          
 
