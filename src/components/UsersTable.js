@@ -61,7 +61,7 @@ export default function UsersTable() {
         if (flatsValue.length > 1) {
           const min = flatsValue[0];
           const max = flatsValue[1];
-          if (dataFlats.docs?.length < min || dataFlats.docs?.length > max) {
+          if (dataFlats.docs?.length <= min || dataFlats.docs?.length >= max) {
             continue;
           }
         } else {
@@ -90,11 +90,13 @@ export default function UsersTable() {
 
   return (  
     <>
-    <div className="border-2 rounded-sm">
+    <div  className="flex justify-center">
     <Box
+     border={0}
       textAlign={"center"}
-      sx={{ width: "60%", marginLeft: "20%" }}
+      className="p-4 rounded-2xl my-3 shadow-md"
       component={"form"}
+     
     >
       <TextField
         select
@@ -103,7 +105,7 @@ export default function UsersTable() {
         SelectProps={{ native: true }}
         value={userType}
         onChange={(e) => setUserType(e.target.value)}
-        className="my-4"
+        className="my-4 mx-4 "
       >
         <option key={"none"} value={""}></option>
         <option key={"100-200"} value={"admin"}>
@@ -139,7 +141,7 @@ export default function UsersTable() {
         <option key={"400-500"} value={"30-61"}>
           30 - 61
         </option>
-        <option key={"1000"} value={"61+"}>
+        <option key={"61-max"} value={"61-999999"}>
           61+
         </option>
       </TextField>
@@ -151,7 +153,7 @@ export default function UsersTable() {
         <Slider
           max={120}
           min={18}
-          step={10}
+          step={5}
           value={valueSlider}
           onChange={(e, newValue) => setValueSlider(newValue)}
           getAriaLabel={() => "Age Range"}

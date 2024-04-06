@@ -58,6 +58,7 @@ const TableFlats = ({ type }) => {
   const [areaSize, setAreaSize] = useState(0);
   const [flag, setFlag] = useState(false);
   const [loading, setLoading] = useState(false);
+  
 
   const getData = async () => {
     setLoading(true);
@@ -95,7 +96,11 @@ const TableFlats = ({ type }) => {
         let settings = areaSize.split("-");
         arrayWhere.push(where("areaSize", ">=", parseInt(settings[0])));
         arrayWhere.push(where("areaSize", "<=", parseInt(settings[1])));
-        console.log(arrayWhere);
+      }
+      if (rentPrice) {
+        let settings = rentPrice.split("-");
+        arrayWhere.push(where("rentPrice", ">=", parseInt(settings[0])));
+        arrayWhere.push(where("rentPrice", "<=", parseInt(settings[1])));
       }
       let searchFlats = query(ref, ...arrayWhere);
       const results = await getDocs(searchFlats);
@@ -137,7 +142,7 @@ const TableFlats = ({ type }) => {
 
   useEffect(() => {
     getData();
-  }, [city, areaSize]);
+  }, [city, areaSize,rentPrice]);
   useEffect(() => {
     getData();
   }, [flag]);
@@ -176,41 +181,41 @@ const TableFlats = ({ type }) => {
               {" "}
               100 - 200
             </option>
-            <option key={"200-300"} value={"201-300"}>
+            <option key={"201-300"} value={"201-300"}>
               {" "}
-              200 - 300{" "}
+              201 - 300{" "}
             </option>
-            <option key={"300-400"} value={"301-400"}>
+            <option key={"301-400"} value={"301-400"}>
               {" "}
-              300 - 400{" "}
+              301 - 400{" "}
             </option>
-            <option key={"400-500"} value={"401-500"}>
+            <option key={"401-500"} value={"401-500"}>
               {" "}
-              400 - 500{" "}
+              401 - 500{" "}
             </option>
-            <option key={"500-600"} value={"501-600"}>
+            <option key={"501-600"} value={"501-600"}>
               {" "}
-              500 - 600{" "}
+              501 - 600{" "}
             </option>
-            <option key={"600-700"} value={"601-700"}>
+            <option key={"601-700"} value={"601-700"}>
               {" "}
-              600 - 700{" "}
+              601 - 700{" "}
             </option>
-            <option key={"700-800"} value={"701-800"}>
+            <option key={"701-800"} value={"701-800"}>
               {" "}
-              700 - 800{" "}
+              701 - 800{" "}
             </option>
-            <option key={"800-900"} value={"801-900"}>
+            <option key={"801-900"} value={"801-900"}>
               {" "}
-              800 - 900{" "}
+              801 - 900{" "}
             </option>
-            <option key={"900-1000"} value={"901-1000"}>
+            <option key={"901-1000"} value={"901-1000"}>
               {" "}
-              900 - 1000{" "}
+              901 - 1000{" "}
             </option>
-            <option key={"1000"} value={"+1000"}>
+            <option key={"1001-max"} value={"1001-999999"}>
               {" "}
-              + 1000{" "}
+              + 1001{" "}
             </option>
           </TextField>
           <TextField
@@ -228,41 +233,41 @@ const TableFlats = ({ type }) => {
               {" "}
               100 - 200
             </option>
-            <option key={"200-300"} value={"201-300"}>
+            <option key={"201-300"} value={"201-300"}>
               {" "}
-              200 - 300{" "}
+              201 - 300{" "}
             </option>
-            <option key={"300-400"} value={"301-400"}>
+            <option key={"301-400"} value={"301-400"}>
               {" "}
-              300 - 400{" "}
+              301 - 400{" "}
             </option>
-            <option key={"400-500"} value={"401-500"}>
+            <option key={"401-500"} value={"401-500"}>
               {" "}
-              400 - 500{" "}
+              401 - 500{" "}
             </option>
-            <option key={"500-600"} value={"501-600"}>
+            <option key={"501-600"} value={"501-600"}>
               {" "}
-              500 - 600{" "}
+              501 - 600{" "}
             </option>
-            <option key={"600-700"} value={"601-700"}>
+            <option key={"601-700"} value={"601-700"}>
               {" "}
-              600 - 700{" "}
+              601 - 700{" "}
             </option>
-            <option key={"700-800"} value={"701-800"}>
+            <option key={"701-800"} value={"701-800"}>
               {" "}
-              700 - 800{" "}
+              701 - 800{" "}
             </option>
-            <option key={"800-900"} value={"801-900"}>
+            <option key={"801-900"} value={"801-900"}>
               {" "}
-              800 - 900{" "}
+              801 - 900{" "}
             </option>
-            <option key={"900-1000"} value={"901-1000"}>
+            <option key={"901-1000"} value={"901-1000"}>
               {" "}
-              900 - 1000{" "}
+              901 - 1000{" "}
             </option>
-            <option key={"1000"} value={"+1000"}>
+            <option key={"1001-max"} value={"1001-999999"}>
               {" "}
-              + 1000{" "}
+              + 1001{" "}
             </option>
           </TextField>
         </Box>
