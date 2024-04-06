@@ -40,22 +40,59 @@ export default function FlatForm({type, id}){
     }   
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        await addDoc(flatsRef , {
-            city : city.current.value,
-            streetName : streetName.current.value ,
-            streetNumber : streetNumber.current.value , 
-            areaSize : areaSize.current.value , 
-            hasAC : hasAC.current.checked , 
-            yearBuilt : yearBuilt.current.value , 
-            rentPrice : rentPrice.current.value , 
-            dateAvailable : dateAvailable.current.value , 
-            user: JSON.parse (localStorage.getItem('user_logged'))
-        })
+        
         if (type === 'create') {
             await addDoc(ref, flat);
             navigate('/flats', { replace: false });
         }
+        const onlyLetters = () =>{
+          if (city.current.value.length < 2 || 
+              streetName.current.value < 2 ||
+              streetName.current.value <2 
+          ){
+            return false
+          }else{
+            return true
+          }
+        }
 
+        const forLetters = () =>{
+          const validate = /^[a-zA-Z\s]+$/
+          if(validate.test(city.current.value) && validate.test(streetName.current.value)){
+            return true
+          }else{
+            return false
+          }
+        }
+        
+        const onlyNumbers = () =>{
+          const validate =  /^[0-9]+$/
+          if(validate.test(areaSize.current.value) && 
+             validate.test(rentPrice.current.value) &&
+             validate.test(yearBuilt.current.value)
+        ){
+          return true
+        }else{
+          return false
+        }
+        
+
+        }
+        if(onlyLetters() && forLetters() && onlyNumbers() && yearBuilt.current.value < 2024 ){
+          await addDoc(flatsRef , {
+            city : city.current.value,
+            streetName : streetName.current.value ,
+            streetNumber : streetNumber.current.value , 
+            areaSize : parseInt(areaSize.current.value) , 
+            hasAC : hasAC.current.checked , 
+            yearBuilt : yearBuilt.current.value , 
+            rentPrice : parseInt(rentPrice.current.value) , 
+            dateAvailable : dateAvailable.current.value , 
+            user: JSON.parse (localStorage.getItem('user_logged'))
+        })
+        }else{
+          alert('Se requieren todos los campos')
+        }
     }
     const getFlatData = async () => {
         const dataFlat = await getDoc(refFlat);
