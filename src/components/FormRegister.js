@@ -127,7 +127,7 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
         email: emailRef.current.value,
         password: passwordRef.current.value,
         birthday: birthdayRef.current.value,
-        role: roleRef.current.value,
+        role: roleRef.current.value
       };
 
       user = { ...user, password: passwordRef.current.value };
@@ -360,31 +360,32 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
                   />
                 )}
               </Grid>
+              {type === "create" &&
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="confirmPassword"
-                  label="Confirm Password"
-                  type={showPassword ? "text" : "password"}
-                  id="confirmPassword"
-                  inputRef={confirmPasswordRef}
-                  value={confirmPassword}
-                  onChange={handleConfirmPasswordChange} // Utiliza la función para manejar el cambio en la confirmación de contraseña
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handlePasswordToggle}
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
+              <TextField
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type={showPassword ? "text" : "password"}
+                id="confirmPassword"
+                inputRef={confirmPasswordRef}
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange} // Utiliza la función para manejar el cambio en la confirmación de contraseña
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handlePasswordToggle}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>}
               <Grid item xs={12}>
                 {/* <p className="text-blue-500">Birthday</p> */}
                 <TextField
@@ -422,7 +423,7 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
                   >
                     <MenuItem value={"landlord"}>Landlord</MenuItem>
                     <MenuItem value={"renter"}>Renter</MenuItem>
-                    
+                    {type === "update" && userLogged === "s2AzKDLpc1OwssHt5nqG" && <MenuItem value={"admin"}>Admin</MenuItem>}
                   </Select>
                 </FormControl>
               </Grid>
