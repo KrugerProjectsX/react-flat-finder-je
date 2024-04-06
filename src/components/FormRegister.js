@@ -423,7 +423,7 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
                   >
                     <MenuItem value={"landlord"}>Landlord</MenuItem>
                     <MenuItem value={"renter"}>Renter</MenuItem>
-                    {type === "update" && userLogged === "s2AzKDLpc1OwssHt5nqG" && <MenuItem value={"admin"}>Admin</MenuItem>}
+                    {type === "update" && type==="view" && <MenuItem value={"admin"}>Admin</MenuItem>}
                   </Select>
                 </FormControl>
               </Grid>

@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   where,
+  Timestamp,
 } from "firebase/firestore";
 import { db } from "../Firebase";
 import { Box, Button, TextField } from "@mui/material";
@@ -25,16 +26,26 @@ export default function Messages({ flatId }) {
     const search = query(refMessages, where("flatId", "==", flatId));
     const dataMessages = await getDocs(search);
     const rows = dataMessages.docs.map((item) => {
-      return { ...item.data(), id: item.id };
+      const message = { ...item.data(), id: item.id };
+      message.timestamp = message.timestamp.toDate();
+      return message;
     });
-    setMessages(rows);
+    const newMessages= [];
+    for( const item of rows ) {
+      const refUser = doc(db, "users", item.userId);
+      const dataUser = await getDoc(refUser);
+      const userMessage= {...dataUser.data() };
+      newMessages.push({...item, user:userMessage })
+    }
+
+    setMessages(newMessages);
   };
 
   const getFlat = async () => {
     const userId = JSON.parse(localStorage.getItem("user_logged"));
     const dataFlat = await getDoc(ref);
     const responseFlat = { ...dataFlat.data() };
-    console.log(responseFlat, userId)
+    console.log(responseFlat, userId);
     if (responseFlat.user === userId) {
       setType("view");
       await getMessages();
@@ -56,6 +67,7 @@ export default function Messages({ flatId }) {
       message: message,
       flatId: flatId,
       userId: JSON.parse(localStorage.getItem("user_logged")),
+      timestamp: Timestamp.fromDate(new Date()),
     };
     await addDoc(refMessages, data);
   };
@@ -97,11 +109,16 @@ export default function Messages({ flatId }) {
       {type === "view" && (
         <>
           {messages.map((item) => {
+            const messageTime = new Date(item.timestamp).toLocaleTimeString();
+            const messageDate = new Date(item.timestamp).toLocaleDateString();
             return (
               <div
                 key={item.id}
                 className="border p-4 m-4 rounded-full bg-blue-100"
               >
+                <p className="text-center">
+                  {item.user.firstName} sent a message at {messageDate} {messageTime}
+                </p>
                 <p className="text-center">{item.message}</p>
               </div>
             );

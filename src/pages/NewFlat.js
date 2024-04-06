@@ -10,7 +10,7 @@ const NewFlat = () =>{
     return(
     <>
         <Header/>
-        <FlatForm/>
+        <FlatForm type={'create'} id={null} user={null}/>
     </>)
 }
 

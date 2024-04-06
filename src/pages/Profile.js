@@ -24,6 +24,7 @@ export default function Profile() {
     const handleUpdateProfile = () => {
         navigate('/update-profile'); // Utiliza navigate para redirigir a la página de actualización de perfil
     };
+    
 
 
 return (
