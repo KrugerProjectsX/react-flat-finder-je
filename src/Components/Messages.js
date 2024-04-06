@@ -34,6 +34,7 @@ export default function Messages({ flatId }) {
     const userId = JSON.parse(localStorage.getItem("user_logged"));
     const dataFlat = await getDoc(ref);
     const responseFlat = { ...dataFlat.data() };
+    console.log(responseFlat, userId)
     if (responseFlat.user === userId) {
       setType("view");
       await getMessages();
@@ -61,7 +62,7 @@ export default function Messages({ flatId }) {
   return (
     <div>
       <h1>Messages</h1>
-      {type === "view" && (
+      {type === "create" && (
         <>
           <Box
             component={"form"}

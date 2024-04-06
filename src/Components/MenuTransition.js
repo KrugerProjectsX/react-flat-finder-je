@@ -13,13 +13,10 @@
   import ExitToAppIcon from "@mui/icons-material/ExitToApp";
   import Avatar from "@mui/material/Avatar";
   import HomeIcon from '@mui/icons-material/Home';
-  import HomeWorkIcon from '@mui/icons-material/HomeWork';
   import FavoriteIcon from '@mui/icons-material/Favorite';
   import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-  import BuildIcon from '@mui/icons-material/Build';
-  import AddBusinessIcon from '@mui/icons-material/AddBusiness';
   import CorporateFareIcon from '@mui/icons-material/CorporateFare';
-  import PageviewIcon from '@mui/icons-material/Pageview';
+
 
   export default function MenuTransitions({ user, setUser }) {
     const navigate = useNavigate();
@@ -72,7 +69,8 @@
             <Avatar src="/broken-image.jpg" className="m-2" />
             {user && (
               <span>
-                {user.firstName} {user.lastName}
+                {user.firstName} {user.lastName} <br>
+                </br>{user.email}
               </span>
             )}
             <svg

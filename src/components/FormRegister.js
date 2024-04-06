@@ -28,6 +28,7 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [allFieldsFilled, setAllFieldsFilled] = useState(true); // Estado para controlar si todos los campos están llenos
+  const userLogged = JSON.parse(localStorage.getItem("user_logged"));
 
   const showAlertMessage = (severity, message) => {
     setAlertSeverity(severity);
@@ -43,7 +44,7 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
     email: "",
     password: "",
     birthday: "",
-    role: ""
+    role: "",
   });
 
   const firstNameRef = useRef("");
@@ -52,10 +53,11 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
   const passwordRef = useRef("");
   const birthdayRef = useRef(currentDate);
   const roleRef = useRef("");
+  const confirmPasswordRef = useRef("");
 
   let ref = null;
   if (userId === null && type !== "create") {
-    userId = JSON.parse(localStorage.getItem("user_logged"));
+    userId = userLogged;
   }
   if (userId && type !== "create") {
     ref = doc(db, "users", userId);
@@ -93,7 +95,7 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
     if (
       firstNameValidation !== "" ||
       lastNameValidation !== "" ||
-      emailValidation !== "" 
+      emailValidation !== ""
     ) {
       // Mostrar la alerta si algún campo no pasa la validación
       showAlertMessage("error", "Please fill in all fields correctly.");
@@ -106,11 +108,17 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
         lastNameRef.current.value === "" ||
         emailRef.current.value === "" ||
         passwordRef.current.value === "" ||
+        confirmPassword === "" ||
         birthdayRef.current.value === "" ||
         roleRef.current.value === ""
       ) {
         showAlertMessage("error", "Please fill in all required fields.");
         setAllFieldsFilled(false);
+        return;
+      }
+      if (passwordRef.current.value !== confirmPassword) {
+        // Compara las contraseñas
+        showAlertMessage("error", "The passwords do not match.");
         return;
       }
       let user = {
@@ -123,27 +131,28 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
       };
 
       user = { ...user, password: passwordRef.current.value };
-      await addDoc(refCreate, user);
-      
+      const docRef = await addDoc(refCreate, user);
+      const useDocRef = docRef.id;
+      localStorage.setItem("user_logged", JSON.stringify(useDocRef));
       showAlertMessage("success", "User created successfully.");
-      navigate("/", { replace: true });
-      console.log(user);
+      setTimeout(() => {
+        navigate("/dashboard", { replace: true });
+      }, 2000);
     }
     if (type === "update") {
       await updateDoc(ref, {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      birthday: user.birthday,
-      role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        birthday: user.birthday,
+        role: user.role,
       });
       showAlertMessage("success", "Profile updated successfully.");
       setTimeout(() => {
-      navigate("/dashboard", { replace: true });
+        navigate("/dashboard", { replace: true });
       }, 2000);
     }
     if (type === "view") {
-      console.log(user);
       showAlertMessage("info", "Profile loaded successfully.");
     }
   };
@@ -191,6 +200,7 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
   const [lastNameError, setLastNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleFirstNameChange = (event) => {
     setFirstNameError(validate(event.target.value, "firstName"));
@@ -222,6 +232,9 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
       ...prevState,
       password: event.target.value,
     }));
+  };
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
   };
 
   const validate = (value, type) => {
@@ -348,6 +361,31 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
                 )}
               </Grid>
               <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type={showPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  inputRef={confirmPasswordRef}
+                  value={confirmPassword}
+                  onChange={handleConfirmPasswordChange} // Utiliza la función para manejar el cambio en la confirmación de contraseña
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handlePasswordToggle}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
                 {/* <p className="text-blue-500">Birthday</p> */}
                 <TextField
                   required
@@ -380,11 +418,11 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
                     // onChange={handleChange}
                     inputRef={roleRef}
                     value={user.role}
-                    onChange={(e) => setUser({...user, role: e.target.value})} 
+                    onChange={(e) => setUser({ ...user, role: e.target.value })}
                   >
                     <MenuItem value={"landlord"}>Landlord</MenuItem>
                     <MenuItem value={"renter"}>Renter</MenuItem>
-          
+                    
                   </Select>
                 </FormControl>
               </Grid>
