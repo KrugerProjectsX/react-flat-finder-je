@@ -4,7 +4,7 @@ import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { db } from "../Firebase";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import Alert from '@mui/material/Alert'
 export default function FlatForm({ type, id}) {
  
   const [flatLoaded, setFlatLoaded] = useState(false);
@@ -13,11 +13,11 @@ export default function FlatForm({ type, id}) {
   const [flat, setFlat] = useState({
     city: "",
     streetName: "",
-    streetNumber: 0,
-    areaSize: 0,
+    streetNumber: "",
+    areaSize: "",
     hasAc: false,
-    yearBuilt: 0,
-    rentPrice: 0,
+    yearBuilt: "",
+    rentPrice: "",
     dateAvailable: currentDate,
   });
   const navigate = useNavigate();
@@ -25,23 +25,29 @@ export default function FlatForm({ type, id}) {
   const date = new Date().toJSON().slice(0, 10);
   const city = useRef("");
   const streetName = useRef("");
-  const streetNumber = useRef(0);
-  const areaSize = useRef(0);
+  const streetNumber = useRef("");
+  const areaSize = useRef("");
   const hasAC = useRef(false);
-  const yearBuilt = useRef(0);
-  const rentPrice = useRef(0);
+  const yearBuilt = useRef("");
+  const rentPrice = useRef("");
   const dateAvailable = useRef("");
   const ref = collection(db, "flats");
   let refFlat = null;
+  const [showAlert, setShowAlert] = useState(false);
+  
   if (id && type !== "create") {
     refFlat = doc(db, "flats", id);
   }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (type === "create") {
       await addDoc(ref, flat);
-      navigate("/dashboard", { replace: false });
+      setShowAlert(true);
+      setTimeout(() => {
+        navigate("/dashboard", { replace: false });
+      }, 2000);
     }
     const onlyLetters = () => {
       if (
@@ -54,6 +60,7 @@ export default function FlatForm({ type, id}) {
         return true;
       }
     };
+    
 
     const forLetters = () => {
       const validate = /^[A-Za-z0-9 ,.!?\s-]+$/; // updated regular expression
@@ -98,7 +105,7 @@ export default function FlatForm({ type, id}) {
         user: JSON.parse(localStorage.getItem("user_logged")),
       });
     } else {
-      alert("Se requieren todos los campos");
+      alert("You need to fill correctly the information");
     }
   };
   const getFlatData = async () => {
@@ -125,6 +132,7 @@ export default function FlatForm({ type, id}) {
   }, []);
 
   return (
+    <>
     <Box
       onSubmit={handleSubmit}
       sx={{
@@ -143,7 +151,7 @@ export default function FlatForm({ type, id}) {
             fontWeight={"bold"}
             component={"h2"}
             className="text-black text-2xl md:text-3xl lg:text-4xl"
-          >
+          > 
             Create Your Flat
           </Typography>
         )}
@@ -151,6 +159,7 @@ export default function FlatForm({ type, id}) {
           <Typography variant="h6">Flat Owner: {flat.firstName} {flat.lastName} </Typography>
         )}
           <br />
+          {showAlert && <Alert severity="success">You have created a new flat.</Alert>}
           <div className="flex flex-col md:flex-row lg:flex-row">
             <TextField
               disabled={type === "view"}
@@ -162,6 +171,7 @@ export default function FlatForm({ type, id}) {
               onChange={(e) =>
                 setFlat({ ...flat, city: e.target.value })
               }
+              required
             />
             <TextField
               disabled={type === "view"}
@@ -170,6 +180,7 @@ export default function FlatForm({ type, id}) {
               inputRef={streetName}
               variant="outlined"
               className="mb-2 md:ml-2 lg:ml-4 md:mb-0 lg:mb-0 flex-grow"
+              required
             />
           </div>
           <br />
@@ -181,6 +192,7 @@ export default function FlatForm({ type, id}) {
               inputRef={streetNumber}
               variant="outlined"
               className="mb-2 md:mr-2 lg:mr-4 md:mb-0 lg:mb-0 flex-grow"
+              required
             />
             <TextField
               disabled={type === "view"}
@@ -190,6 +202,7 @@ export default function FlatForm({ type, id}) {
               inputRef={areaSize}
               variant="outlined"
               className="mb-2 md:ml-2 lg:ml-4 md:mb-0 lg:mb-0 flex-grow"
+              required
             />
           </div>
           <br />
@@ -199,6 +212,7 @@ export default function FlatForm({ type, id}) {
                 disabled={type === "view"}
                 defaultValue={flat.hasAc}
                 inputRef={hasAC}
+              
               />
               <label htmlFor="switch" className="ml-2">
                 Has AC
@@ -209,10 +223,11 @@ export default function FlatForm({ type, id}) {
               disabled={type === "view"}
               label="Year built"
               type="number"
-              inputProps={{ min: 1900, max: 2050 }}
+              // inputProps={{ min: 1900, max: 2050 }}
               inputRef={yearBuilt}
               variant="outlined"
               className="mb-2 md:ml-2 lg:ml-4 md:mb-0 lg:mb-0 flex-grow"
+              required
             />
           </div>
           <br />
@@ -225,6 +240,7 @@ export default function FlatForm({ type, id}) {
               inputRef={rentPrice}
               variant="outlined"
               className="mb-2 md:mr-2 lg:mr-4 md:mb-0 lg:mb-0 flex-grow"
+              required
             />
             <TextField
               disabled={type === "view"}
@@ -235,6 +251,7 @@ export default function FlatForm({ type, id}) {
               inputRef={dateAvailable}
               variant="outlined"
               className="mb-2 md:ml-2 lg:ml-4 md:mb-0 lg:mb-0 flex-grow"
+              required
             />
           </div>
           <br />
@@ -252,5 +269,6 @@ export default function FlatForm({ type, id}) {
         <p>Loading...</p>
       )}
     </Box>
+    </>
   );
 }

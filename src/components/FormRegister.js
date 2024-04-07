@@ -149,7 +149,7 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
       });
       showAlertMessage("success", "Profile updated successfully.");
       setTimeout(() => {
-        navigate("/dashboard", { replace: true });
+        navigate("/profile", { replace: true });
       }, 2000);
     }
     if (type === "view") {

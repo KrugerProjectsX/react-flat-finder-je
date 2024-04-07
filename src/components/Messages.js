@@ -17,9 +17,9 @@ export default function Messages({ flatId }) {
   const refMessages = collection(db, "messages");
 
   const [flat, setFlat] = useState({});
-  //type = view | type = create
   const [type, setType] = useState("create");
   const [messages, setMessages] = useState([]);
+  const [messageSent, setMessageSent] = useState(false); // Estado para controlar si se muestra el mensaje de confirmación
   const messageInput = useRef("");
 
   const getMessages = async () => {
@@ -30,12 +30,12 @@ export default function Messages({ flatId }) {
       message.timestamp = message.timestamp.toDate();
       return message;
     });
-    const newMessages= [];
-    for( const item of rows ) {
+    const newMessages = [];
+    for (const item of rows) {
       const refUser = doc(db, "users", item.userId);
       const dataUser = await getDoc(refUser);
-      const userMessage= {...dataUser.data() };
-      newMessages.push({...item, user:userMessage })
+      const userMessage = { ...dataUser.data() };
+      newMessages.push({ ...item, user: userMessage });
     }
 
     setMessages(newMessages);
@@ -45,7 +45,6 @@ export default function Messages({ flatId }) {
     const userId = JSON.parse(localStorage.getItem("user_logged"));
     const dataFlat = await getDoc(ref);
     const responseFlat = { ...dataFlat.data() };
-    console.log(responseFlat, userId);
     if (responseFlat.user === userId) {
       setType("view");
       await getMessages();
@@ -70,12 +69,22 @@ export default function Messages({ flatId }) {
       timestamp: Timestamp.fromDate(new Date()),
     };
     await addDoc(refMessages, data);
+
+    // Limpiar el campo de entrada y mostrar el mensaje de confirmación
+    messageInput.current.value = "";
+    setMessageSent(true);
+    // Ocultar el mensaje de confirmación después de unos segundos
+    setTimeout(() => {
+      setMessageSent(false);
+    }, 3000);
   };
+
   return (
     <div>
-      <h1>Messages</h1>
+      <h1>Messanger</h1>
       {type === "create" && (
         <>
+
           <Box
             component={"form"}
             onSubmit={handleSubmit}
@@ -85,9 +94,10 @@ export default function Messages({ flatId }) {
         justify-center
         p-4
         rounded-lg
-        bg-gray-200
+        bg-gray-500
         shadow-md"
           >
+            {messageSent && <p>Message sent</p>} {/* Mostrar mensaje de confirmación */}
             <TextField
               type={"text"}
               label={"Message"}
@@ -99,10 +109,11 @@ export default function Messages({ flatId }) {
             />
             <Button
               type={"submit"}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-emerald-300 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded"
             >
               Send
             </Button>
+            
           </Box>
         </>
       )}
@@ -114,12 +125,15 @@ export default function Messages({ flatId }) {
             return (
               <div
                 key={item.id}
-                className="border p-4 m-4 rounded-full bg-blue-100"
+                className="max-w-xs mx-auto my-4 p-4 rounded-lg shadow bg-emerald-300"
               >
-                <p className="text-center">
-                  {item.user.firstName} sent a message at {messageDate} {messageTime}
-                </p>
-                <p className="text-center">{item.message}</p>
+                <div className="flex justify-between items-center mb-2">
+                  <p className="text-sm font-semibold">{item.user.firstName}</p>
+                  <p className="text-xs text-gray-500">
+                    {messageDate} {messageTime}
+                  </p>
+                </div>
+                <p className="text-base">{item.message}</p>
               </div>
             );
           })}
