@@ -221,15 +221,16 @@ export default function UsersTable() {
         >
           <TableHead className="bg-gray-50">
             <TableRow>
-              <TableCell onClick={nameSort} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                First Name
+              <TableCell style={{ cursor: "pointer" }} onClick={nameSort} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              &lt; First Name&gt;
               </TableCell>
               <TableCell
+              style={{ cursor: "pointer" }}
                 onClick={lastNameSort}
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 align="right"
               >
-                Last Name
+               &lt; Last Name&gt;
               </TableCell>
               <TableCell
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -250,11 +251,13 @@ export default function UsersTable() {
                 Role
               </TableCell>
               <TableCell
+              style={{ cursor: "pointer" }}
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 align="right"
                 onClick={flatSort}
+                
               >
-                Flats Count
+               &lt; Flats Count&gt;
               </TableCell>
               <TableCell
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"

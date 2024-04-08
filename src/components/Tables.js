@@ -350,11 +350,11 @@ const TableFlats = ({ type ,  user, setUser}) => {
           <CircularProgress />
         </div>
       ) :(
-      <TableContainer 
+      <div className="flex justify-center content-center">
+        <TableContainer 
         className="flex justify-between"
         sx={{
-          width: "80%",
-          marginLeft: "10%",
+          width: "90%",
           boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
           borderRadius: "8px",
           overflowX: "auto",
@@ -364,7 +364,7 @@ const TableFlats = ({ type ,  user, setUser}) => {
         <Table >
           <TableHead  >
             <TableRow>
-            <StyledTableCell align="center">First Name</StyledTableCell>
+            <StyledTableCell align="center">Owner</StyledTableCell>
             <StyledTableCell align="center">Email</StyledTableCell>
               <StyledTableCell style={{ cursor: "pointer" }} onClick={handleSort} align="center"> &lt;City&gt; </StyledTableCell>
               <StyledTableCell align="center">Street</StyledTableCell>
@@ -461,6 +461,7 @@ const TableFlats = ({ type ,  user, setUser}) => {
           </TableBody>
         </Table>
       </TableContainer>
+      </div>
       )}
     </>
   );
