@@ -24,11 +24,12 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
     setShowPassword(!showPassword);
   };
   const navigate = useNavigate();
-  const [alertSeverity, setAlertSeverity] = useState(null);
+  const [alertSeverity, setAlertSeverity] = useState(null); 
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [allFieldsFilled, setAllFieldsFilled] = useState(true); // Estado para controlar si todos los campos están llenos
   const userLogged = JSON.parse(localStorage.getItem("user_logged"));
+
 
   const showAlertMessage = (severity, message) => {
     setAlertSeverity(severity);
@@ -103,6 +104,17 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
     }
 
     if (type === "create") {
+      
+        if (
+          firstNameRef.current.value.length < 2 ||
+          lastNameRef.current.value.length < 2
+        ) {
+          showAlertMessage("error", "Please more than two letters");
+        setAllFieldsFilled(false);
+        return;
+        } else {
+          setAllFieldsFilled(true);
+        }
       if (
         firstNameRef.current.value === "" ||
         lastNameRef.current.value === "" ||
