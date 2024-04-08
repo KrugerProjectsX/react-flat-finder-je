@@ -89,7 +89,7 @@ export default function UsersTable() {
   }, [userType, flatsCounter, valueSlider]);
 
   return (  
-    <>
+    <div>
     <div  className="flex justify-center">
     <Box
      border={0}
@@ -164,8 +164,8 @@ export default function UsersTable() {
     </Box>
     </div>
       <TableContainer>
-        <Table
-          className="min-w-full divide-y divide-gray-200"
+      <Table
+          className="min-w-full divide-gray-200"
           aria-label="simple table"
         >
           <TableHead className="bg-gray-50">
@@ -242,7 +242,8 @@ export default function UsersTable() {
             ))}
           </TableBody>
         </Table>
+        
       </TableContainer>
-    </>
+    </div>
   );
 }

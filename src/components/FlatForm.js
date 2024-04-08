@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import { Button, Switch, TextField, Typography } from "@mui/material";
-import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../Firebase";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,8 +20,9 @@ export default function FlatForm({ type, id}) {
     rentPrice: "",
     dateAvailable: currentDate,
   });
-  const navigate = useNavigate();
 
+
+  const navigate = useNavigate();
   const date = new Date().toJSON().slice(0, 10);
   const city = useRef("");
   const streetName = useRef("");
@@ -31,24 +32,25 @@ export default function FlatForm({ type, id}) {
   const yearBuilt = useRef("");
   const rentPrice = useRef("");
   const dateAvailable = useRef("");
-  const ref = collection(db, "flats");
   let refFlat = null;
   const [showAlert, setShowAlert] = useState(false);
   
   if (id && type !== "create") {
     refFlat = doc(db, "flats", id);
   }
-
+  const capitalizeFirstLetter = (word) =>{
+    if (!word){
+      return ''
+    }
+    const firstLetter = word.charAt(0).toUpperCase();
+    const restOfWord = word.slice(1).toLowerCase();
+    return firstLetter + restOfWord;
+  }
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (type === "create") {
-      await addDoc(ref, flat);
-      setShowAlert(true);
-      setTimeout(() => {
-        navigate("/dashboard", { replace: false });
-      }, 2000);
-    }
+  
     const onlyLetters = () => {
       if (
         city.current.value.length < 2 ||
@@ -63,7 +65,7 @@ export default function FlatForm({ type, id}) {
     
 
     const forLetters = () => {
-      const validate = /^[A-Za-z0-9 ,.!?\s-]+$/; // updated regular expression
+      const validate = /^[a-zA-Z\s]+$/; // updated regular expression
       if (
         validate.test(city.current.value) &&
         validate.test(streetName.current.value)
@@ -86,24 +88,40 @@ export default function FlatForm({ type, id}) {
         return false;
       }
     };
-   console.log(onlyLetters(),forLetters(),onlyNumbers(),yearBuilt.current.value)
+    let flatForSubmit = {
+      city: city.current.value,
+      streetName: streetName.current.value,
+      streetNumber: streetNumber.current.value,
+      areaSize: parseInt(areaSize.current.value),
+      hasAC: hasAC.current.checked,
+      yearBuilt: yearBuilt.current.value,
+      rentPrice: parseInt(rentPrice.current.value),
+      dateAvailable: dateAvailable.current.value,
+      user: JSON.parse(localStorage.getItem("user_logged")),
+    }
+   
     if (
       onlyLetters() &&
       forLetters() &&
       onlyNumbers() &&
-      yearBuilt.current.value < 2024
+      yearBuilt.current.value < 2024 &&
+      city.current.value &&
+      streetName.current.value &&
+      streetNumber.current.value &&
+      areaSize.current.value &&
+      rentPrice.current.value &&
+      dateAvailable.current.value 
     ) {
-      await addDoc(flatsRef, {
-        city: city.current.value,
-        streetName: streetName.current.value,
-        streetNumber: streetNumber.current.value,
-        areaSize: parseInt(areaSize.current.value),
-        hasAC: hasAC.current.checked,
-        yearBuilt: yearBuilt.current.value,
-        rentPrice: parseInt(rentPrice.current.value),
-        dateAvailable: dateAvailable.current.value,
-        user: JSON.parse(localStorage.getItem("user_logged")),
-      });
+    
+      if(type === 'update'){
+        
+        await updateDoc(refFlat , flatForSubmit )
+
+      }else{ await addDoc(flatsRef, flatForSubmit);}
+      setShowAlert(true);
+      setTimeout(() => {
+        navigate("/my-flats", { replace: false });
+      }, 2000);
     } else {
       alert("You need to fill correctly the information");
     }
@@ -168,9 +186,11 @@ export default function FlatForm({ type, id}) {
               inputRef={city}
               variant="outlined"
               className="mb-2 md:mr-2 lg:mr-4 md:mb-0 lg:mb-0 flex-grow"
-              onChange={(e) =>
-                setFlat({ ...flat, city: e.target.value })
-              }
+              onChange={(e) =>{
+                const inputValue = e.target.value
+                const capitalized = capitalizeFirstLetter(inputValue);
+                setFlat({ ...flat, city: capitalized })
+              }}
               required
             />
             <TextField
