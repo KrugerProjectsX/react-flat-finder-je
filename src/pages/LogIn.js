@@ -87,7 +87,7 @@ export default function LogIn() {
       }
     } else {
       console.log(" email failed");
-      showAlertMessage("error", "Email not found");
+      showAlertMessage("error", "Incorrect email or password");
       setIsProgress(false);
     }
     setIsProgress(false);

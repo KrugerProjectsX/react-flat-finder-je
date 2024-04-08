@@ -24,8 +24,6 @@ export default function UsersTable() {
   const [isAscending, setIsAscending] = useState(true);
   const [flag , setFlag] = useState(false)
   let arrayWhere = [];
-
-  console.log(userType);
   if (userType) {
     arrayWhere.push(where("role", "==", userType));
   }

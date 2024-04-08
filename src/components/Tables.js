@@ -374,8 +374,8 @@ const TableFlats = ({ type ,  user, setUser}) => {
               <StyledTableCell align="center">Year Built</StyledTableCell>
               <StyledTableCell style={{ cursor: "pointer" }} onClick={handlePriceSort} align="center">&lt;Rent Price&gt;</StyledTableCell>
               <StyledTableCell align="center">Date Available</StyledTableCell>
-              {type==="favorite-flats"?(<StyledTableCell align="center">View</StyledTableCell>):(<StyledTableCell align="center">Favorites</StyledTableCell>) }
-              {type==="favorite-flats"?(<StyledTableCell align="center">Edit</StyledTableCell>):(<StyledTableCell align="center">View</StyledTableCell>) }
+              {type==="favorite-flats" && type ==="my-flats" && type !=="favorite-flats" ?(<StyledTableCell align="center">View</StyledTableCell>):(<StyledTableCell align="center">Favorites</StyledTableCell>) }
+              {type==="favorite-flats"&& type ==="my-flats" && type !=="favorite-flats"?(<StyledTableCell align="center">Edit</StyledTableCell>):(<StyledTableCell align="center">View</StyledTableCell>) }
               {type === 'my-flats' && <StyledTableCell align="center">Delete</StyledTableCell> }
               {type === 'all-flats' && user.role === 'admin' &&  <StyledTableCell align="center">Delete</StyledTableCell>}
             </TableRow>
@@ -384,10 +384,10 @@ const TableFlats = ({ type ,  user, setUser}) => {
             {flats.map((row) => (
               <StyledTableRow key={row.id}>
                 <StyledTableCell component="th" scope="row">
-                  {user.firstName}
+                {row.nameUser}
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
-                  {user.email}
+                {row.emailUser}
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
                   {row.city}

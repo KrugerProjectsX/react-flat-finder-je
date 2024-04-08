@@ -240,13 +240,13 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
   const validate = (value, type) => {
     if (type === "firstName") {
       if (!/^[a-zA-Z\s]+$/.test(value)) {
-        return "First name must be a string without numbers.";
+        return "First name must be a string without numbers at least two letters.";
       }
     }
 
     if (type === "lastName") {
       if (!/^[a-zA-Z\s]+$/.test(value)) {
-        return "Last name must be a string without numbers.";
+        return "Last name must be a string without numbers at least two letters.";
       }
     }
 

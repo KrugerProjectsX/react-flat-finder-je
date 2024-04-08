@@ -34,10 +34,12 @@ export default function FlatForm({ type, id}) {
   const dateAvailable = useRef("");
   let refFlat = null;
   const [showAlert, setShowAlert] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user_logged"));
   
   if (id && type !== "create") {
     refFlat = doc(db, "flats", id);
   }
+ 
   const capitalizeFirstLetter = (word) =>{
     if (!word){
       return ''
@@ -50,7 +52,10 @@ export default function FlatForm({ type, id}) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  
+    const refUser = doc(db,"users",user)
+     const dataUser = await getDoc(refUser);
+
+
     const onlyLetters = () => {
       if (
         city.current.value.length < 2 ||
@@ -64,10 +69,19 @@ export default function FlatForm({ type, id}) {
     };
     
 
-    const forLetters = () => {
+    const forCity = () => {
       const validate = /^[a-zA-Z\s]+$/; // updated regular expression
       if (
-        validate.test(city.current.value) &&
+        validate.test(city.current.value)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+    const forStreet = () => {
+      const validate = /^[a-zA-Z\s.,'0-9]+$/; // updated regular expression
+      if (
         validate.test(streetName.current.value)
       ) {
         return true;
@@ -75,6 +89,7 @@ export default function FlatForm({ type, id}) {
         return false;
       }
     };
+
 
     const onlyNumbers = () => {
       const validate = /^[0-9]+$/;
@@ -88,6 +103,7 @@ export default function FlatForm({ type, id}) {
         return false;
       }
     };
+    
     let flatForSubmit = {
       city: city.current.value,
       streetName: streetName.current.value,
@@ -98,11 +114,15 @@ export default function FlatForm({ type, id}) {
       rentPrice: parseInt(rentPrice.current.value),
       dateAvailable: dateAvailable.current.value,
       user: JSON.parse(localStorage.getItem("user_logged")),
+      nameUser: dataUser.data().firstName,
+      emailUser: dataUser.data().email
     }
-   
+    
+    console.log(onlyLetters(),forCity() ,forStreet(), onlyNumbers(),  yearBuilt.current.value);
     if (
       onlyLetters() &&
-      forLetters() &&
+      forCity() &&
+      forStreet()&&
       onlyNumbers() &&
       yearBuilt.current.value < 2024 &&
       city.current.value &&
