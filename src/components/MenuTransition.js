@@ -109,15 +109,14 @@
           <MenuItem onClick={createHandleMenuClick("Favorites")}>
             <FavoriteIcon /> Favorites
           </MenuItem>  
-          <MenuItem onClick={createHandleMenuClick("MyFlats")}>
+          {user && user.role !== "renter" && (<MenuItem onClick={createHandleMenuClick("MyFlats")}>
             <CorporateFareIcon /> My Flats
-          </MenuItem>  
-          <MenuItem onClick={createHandleMenuClick("AddANewFlat")}>
-            <CorporateFareIcon /> Add a new Flat
-          </MenuItem>  
-         
-
-          
+          </MenuItem>)}  
+          {user && user.role !== "renter" && (
+            <MenuItem onClick={createHandleMenuClick("AddANewFlat")}>
+              <CorporateFareIcon /> Add a new Flat
+            </MenuItem>
+          )}  
           <MenuItem onClick={createHandleMenuClick("Log out")}>
             <ExitToAppIcon /> Log out
           </MenuItem>
