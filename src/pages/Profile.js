@@ -11,10 +11,22 @@ import Button from '@mui/material/Button';
 import { navigate, useNavigate } from 'react-router-dom';
 import ResponsiveAppBar from '../components/Header'
 import { useParams } from 'react-router-dom';
+import { getUserLogged } from "../services/users";
+import { useEffect } from "react";
 
 const defaultTheme = createTheme();
 
 export default function Profile() {
+    useEffect(() => {
+        const checkUserLogged = async () => {
+          const userLogged = await getUserLogged();
+          if (!userLogged) {
+            window.location.href = "/";
+          }
+        };
+        checkUserLogged();
+      }, []);
+    
     let {userId} =useParams();
     if(userId===undefined) {
         userId=null;
