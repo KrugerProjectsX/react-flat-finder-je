@@ -43,6 +43,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
+    
   },
   // hide last border
   "&:last-child td, &:last-child th": {
@@ -356,20 +357,21 @@ const TableFlats = ({ type ,  user, setUser}) => {
           marginLeft: "10%",
           boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
           borderRadius: "8px",
-          overflow: "hidden",
+          overflowX: "auto",
           
         }}>
 
         <Table >
           <TableHead  >
             <TableRow>
-              <StyledTableCell onClick={handleSort} align="center">City</StyledTableCell>
+
+              <StyledTableCell style={{ cursor: "pointer" }} onClick={handleSort} align="center"> &lt;City&gt; </StyledTableCell>
               <StyledTableCell align="center">Street</StyledTableCell>
               <StyledTableCell align="center">Street Number</StyledTableCell>
-              <StyledTableCell onClick={handleAreaSort} align="center">Area Size</StyledTableCell>
+              <StyledTableCell style={{ cursor: "pointer" }} onClick={handleAreaSort} align="center">&lt;Area Size&gt;</StyledTableCell>
               <StyledTableCell align="center">Has AC</StyledTableCell>
               <StyledTableCell align="center">Year Built</StyledTableCell>
-              <StyledTableCell onClick={handlePriceSort} align="center">Rent Price</StyledTableCell>
+              <StyledTableCell style={{ cursor: "pointer" }} onClick={handlePriceSort} align="center">&lt;Rent Price&gt;</StyledTableCell>
               <StyledTableCell align="center">Date Available</StyledTableCell>
               {type==="favorite-flats"?(<StyledTableCell align="center">View</StyledTableCell>):(<StyledTableCell align="center">Favorites</StyledTableCell>) }
               {type==="favorite-flats"?(<StyledTableCell align="center">Edit</StyledTableCell>):(<StyledTableCell align="center">View</StyledTableCell>) }
