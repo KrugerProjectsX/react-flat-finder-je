@@ -8,6 +8,7 @@ import { useEffect } from "react";
 
 export default function Flat() {
     let { id }  = useParams();
+    console.log(id)
     useEffect(() => {
         const checkUserLogged = async () => {
           const userLogged = await getUserLogged();
