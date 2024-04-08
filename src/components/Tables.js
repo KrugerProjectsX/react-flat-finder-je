@@ -24,6 +24,7 @@ import {
 } from "@firebase/firestore";
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
+import { getUser, getUserLogged } from "../services/users";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,7 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const TableFlats = ({ type }) => {
+const TableFlats = ({ type ,  user, setUser}) => {
   const refFav = collection(db, "favorites");
   const userId = JSON.parse(localStorage.getItem("user_logged"));
   const [flats, setFlats] = useState([]);
@@ -58,6 +59,17 @@ const TableFlats = ({ type }) => {
   const [areaSize, setAreaSize] = useState(0);
   const [flag, setFlag] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isAscending, setIsAscending] = useState(true);
+  
+
+  const capitalizeFirstLetter = (word) =>{
+    if (!word){
+      return ''
+    }
+    const firstLetter = word.charAt(0).toUpperCase();
+    const restOfWord = word.slice(1).toLowerCase();
+    return firstLetter + restOfWord;
+  }
   
 
   const getData = async () => {
@@ -120,6 +132,7 @@ const TableFlats = ({ type }) => {
         const flatWhitFav = { ...item.data(), id: item.id, favorite: favorite };
         allFlats.push(flatWhitFav);
       }
+      
 
       setFlats(allFlats);
     }
@@ -139,6 +152,55 @@ const TableFlats = ({ type }) => {
     await deleteDoc(refRemoveFav);
     setFlag(!flag);
   };
+  const removeFlat = async (id) =>{
+    const refRemove = doc(db , 'flats' , id) ;
+    await deleteDoc(refRemove) ;
+    setFlag(!flag)
+  }
+  const handleSort = () =>{
+    const sortedData = [...flats]
+    sortedData.sort((a , b) =>{
+      const  cityA = a.city.toLowerCase()
+      const  cityB = b.city.toLowerCase()
+      if(isAscending){
+        return  cityA.localeCompare(cityB)
+      }else{
+        return cityB.localeCompare(cityA);
+      }
+    })
+    setFlats(sortedData)
+    setIsAscending(!isAscending);
+  }
+
+  const handleAreaSort = () =>{
+    const sortedData = [...flats]
+    sortedData.sort((a , b)=>{
+      const areaSizeA = a.areaSize
+      const areaSizeB = b.areaSize
+      if(isAscending){
+        return areaSizeA - areaSizeB
+      }else{
+        return areaSizeB - areaSizeA
+      }
+    })
+    setFlats(sortedData) ; 
+    setIsAscending(!isAscending)
+  }
+
+  const handlePriceSort = () =>{
+    const sortedData = [...flats]
+    sortedData.sort((a , b)=>{
+      const priceA = a.rentPrice
+      const priceB = b.rentPrice
+      if(isAscending){
+        return priceA - priceB
+      }else{
+        return priceB - priceA
+      }
+    })
+    setFlats(sortedData) ; 
+    setIsAscending(!isAscending)
+  }
 
   useEffect(() => {
     getData();
@@ -162,7 +224,10 @@ const TableFlats = ({ type }) => {
             label="City"
             variant="outlined"
             value={city}
-            onChange={(e) => setCity(e.target.value)}
+            onChange={(e) =>{
+              const inputValue = e.target.value
+              const capitalized = capitalizeFirstLetter(inputValue)
+              setCity(capitalized)}}
             fullWidth
             sx={{ marginBottom: "20px" }}
           />
@@ -284,7 +349,7 @@ const TableFlats = ({ type }) => {
           <CircularProgress />
         </div>
       ) :(
-        <TableContainer 
+      <TableContainer 
         className="flex justify-between"
         sx={{
           width: "80%",
@@ -294,19 +359,22 @@ const TableFlats = ({ type }) => {
           overflow: "hidden",
           
         }}>
+
         <Table >
           <TableHead  >
             <TableRow>
-              <StyledTableCell align="center">City</StyledTableCell>
+              <StyledTableCell onClick={handleSort} align="center">City</StyledTableCell>
               <StyledTableCell align="center">Street</StyledTableCell>
               <StyledTableCell align="center">Street Number</StyledTableCell>
-              <StyledTableCell align="center">Area Size</StyledTableCell>
+              <StyledTableCell onClick={handleAreaSort} align="center">Area Size</StyledTableCell>
               <StyledTableCell align="center">Has AC</StyledTableCell>
               <StyledTableCell align="center">Year Built</StyledTableCell>
-              <StyledTableCell align="center">Rent Price</StyledTableCell>
+              <StyledTableCell onClick={handlePriceSort} align="center">Rent Price</StyledTableCell>
               <StyledTableCell align="center">Date Available</StyledTableCell>
               {type==="favorite-flats"?(<StyledTableCell align="center">View</StyledTableCell>):(<StyledTableCell align="center">Favorites</StyledTableCell>) }
               {type==="favorite-flats"?(<StyledTableCell align="center">Edit</StyledTableCell>):(<StyledTableCell align="center">View</StyledTableCell>) }
+              {type === 'my-flats' && <StyledTableCell align="center">Delete</StyledTableCell> }
+              {type === 'all-flats' && user.role === 'admin' &&  <StyledTableCell align="center">Delete</StyledTableCell>}
             </TableRow>
           </TableHead>
           <TableBody >
@@ -371,12 +439,14 @@ const TableFlats = ({ type }) => {
                     View
                   </Button>
                 </StyledTableCell>
-                <StyledTableCell>
-                  {" "}
-                  {type === "my-flats" && (
-                    <Button href={`/flat/edit/${row.id}`}>Edit</Button>
+                  {type === "my-flats" && ( <StyledTableCell>
+                    <Button href={`/flat/edit/${row.id}`}>Edit</Button></StyledTableCell>
                   )}
-                </StyledTableCell>
+                
+                {type === "my-flats" && 
+                <StyledTableCell align="center"><Button onClick={() => removeFlat(row.id)}>Delete</Button></StyledTableCell>
+                }
+                 {type === 'all-flats' && user.role === 'admin' &&  <StyledTableCell align="center"><Button onClick={() => removeFlat(row.id)}>Delete</Button></StyledTableCell>}
               </StyledTableRow>
             ))}
           </TableBody>
