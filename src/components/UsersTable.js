@@ -9,7 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
-import { getDocs, query, where, collection } from "firebase/firestore";
+import { getDocs, query, where, collection , doc , deleteDoc } from "firebase/firestore";
 import { db } from "../Firebase";
 import Button from "@mui/material/Button";
 
@@ -21,6 +21,8 @@ export default function UsersTable() {
   const [flatsCounter, setFlatsCounter] = useState(0);
   const [valueSlider, setValueSlider] = React.useState([18, 120]);
   const [users, setUsers] = useState([]);
+  const [isAscending, setIsAscending] = useState(true);
+  const [flag , setFlag] = useState(false)
   let arrayWhere = [];
 
   console.log(userType);
@@ -81,12 +83,61 @@ export default function UsersTable() {
     }
 
     setUsers(usersSet);
-    console.log(searchUsers);
+    
   };
+  const removeFlat = async (id) =>{
+    const refRemove = doc(db , 'users' , id) ;
+    await deleteDoc(refRemove) ;
+    setFlag(!flag)
+  }
+  const nameSort = () =>{
+    const sortedData = [...users]
+    sortedData.sort((a , b) =>{
+      const  nameA = a.firstName.toLowerCase()
+      const  nameB = b.firstName.toLowerCase()
+      if(isAscending){
+        return  nameA.localeCompare(nameB)
+      }else{
+        return nameB.localeCompare(nameA);
+      }
+    })
+    setUsers(sortedData)
+    setIsAscending(!isAscending);
+  }
+  const lastNameSort = () =>{
+    const sortedData = [...users]
+    sortedData.sort((a , b) =>{
+      const  nameA = a.lastName.toLowerCase()
+      const  nameB = b.lastName.toLowerCase()
+      if(isAscending){
+        return  nameA.localeCompare(nameB)
+      }else{
+        return nameB.localeCompare(nameA);
+      }
+    })
+    setUsers(sortedData)
+    setIsAscending(!isAscending);
+  };
+  
+  const flatSort = () =>{
+    const sortedData = [...users]
+    sortedData.sort((a , b)=>{
+      const flatsA = a.flats
+      const flatsB = b.flats
+      if(isAscending){
+        return flatsA - flatsB
+      }else{
+        return flatsB - flatsA
+      }
+    })
+    setUsers(sortedData) ; 
+    setIsAscending(!isAscending)
+  }
+  
 
   useEffect(() => {
     getData();
-  }, [userType, flatsCounter, valueSlider]);
+  }, [userType, flatsCounter, valueSlider , flag]);
 
   return (  
     <div>
@@ -170,10 +221,11 @@ export default function UsersTable() {
         >
           <TableHead className="bg-gray-50">
             <TableRow>
-              <TableCell className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <TableCell onClick={nameSort} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 First Name
               </TableCell>
               <TableCell
+                onClick={lastNameSort}
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 align="right"
               >
@@ -200,6 +252,7 @@ export default function UsersTable() {
               <TableCell
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 align="right"
+                onClick={flatSort}
               >
                 Flats Count
               </TableCell>
@@ -208,6 +261,12 @@ export default function UsersTable() {
                 align="right"
               >
                 Update info
+              </TableCell>
+              <TableCell
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                align="right"
+              >
+                Delete
               </TableCell>
             </TableRow>
           </TableHead>
@@ -237,6 +296,9 @@ export default function UsersTable() {
                   <Button href={`update-profile/${row.id}`} variant="contained">
                     Edit
                   </Button>
+                </TableCell>
+                <TableCell className="px-6 py-4 whitespace-nowrap">
+                  <Button onClick={() => removeFlat(row.id)}>Delete</Button>
                 </TableCell>
               </TableRow>
             ))}
