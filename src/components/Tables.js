@@ -226,7 +226,7 @@ const TableFlats = ({ type ,  user, setUser}) => {
             variant="outlined"
             value={city}
             onChange={(e) =>{
-              const inputValue = e.target.value
+              const inputValue = e.target.value.trim()
               const capitalized = capitalizeFirstLetter(inputValue)
               setCity(capitalized)}}
             fullWidth

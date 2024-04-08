@@ -105,7 +105,7 @@ export default function FlatForm({ type, id}) {
     };
     
     let flatForSubmit = {
-      city: city.current.value,
+      city: city.current.value.trim(),
       streetName: streetName.current.value,
       streetNumber: streetNumber.current.value,
       areaSize: parseInt(areaSize.current.value),

@@ -61,7 +61,7 @@ export default function UsersTable() {
         if (flatsValue.length > 1) {
           const min = flatsValue[0];
           const max = flatsValue[1];
-          if (dataFlats.docs?.length <= min || dataFlats.docs?.length >= max) {
+          if (dataFlats.docs?.length < min || dataFlats.docs?.length > max) {
             continue;
           }
         } else {
