@@ -62,7 +62,7 @@ const TableFlats = ({ type ,  user, setUser}) => {
   const [loading, setLoading] = useState(false);
   const [isAscending, setIsAscending] = useState(true);
   
-
+  
   const capitalizeFirstLetter = (word) =>{
     if (!word){
       return ''
@@ -364,7 +364,8 @@ const TableFlats = ({ type ,  user, setUser}) => {
         <Table >
           <TableHead  >
             <TableRow>
-
+            <StyledTableCell align="center">First Name</StyledTableCell>
+            <StyledTableCell align="center">Email</StyledTableCell>
               <StyledTableCell style={{ cursor: "pointer" }} onClick={handleSort} align="center"> &lt;City&gt; </StyledTableCell>
               <StyledTableCell align="center">Street</StyledTableCell>
               <StyledTableCell align="center">Street Number</StyledTableCell>
@@ -382,6 +383,12 @@ const TableFlats = ({ type ,  user, setUser}) => {
           <TableBody >
             {flats.map((row) => (
               <StyledTableRow key={row.id}>
+                <StyledTableCell component="th" scope="row">
+                  {user.firstName}
+                </StyledTableCell>
+                <StyledTableCell component="th" scope="row">
+                  {user.email}
+                </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
                   {row.city}
                 </StyledTableCell>
