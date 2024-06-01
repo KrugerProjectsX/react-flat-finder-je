@@ -125,6 +125,7 @@ export default function FlatForm({ type, id}) {
       forStreet()&&
       onlyNumbers() &&
       yearBuilt.current.value < 2024 &&
+      yearBuilt.current.value > 1900 &&
       city.current.value &&
       streetName.current.value &&
       streetNumber.current.value &&

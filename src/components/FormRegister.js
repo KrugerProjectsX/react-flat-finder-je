@@ -17,6 +17,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import { doc, updateDoc, addDoc, getDoc, collection } from "firebase/firestore";
 import { db } from "../Firebase";
+import Api from "../services/api";
 
 export default function FormRegister({ type, onSuccessRedirect, userId }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -143,13 +144,16 @@ export default function FormRegister({ type, onSuccessRedirect, userId }) {
       };
 
       user = { ...user, password: passwordRef.current.value };
-      const docRef = await addDoc(refCreate, user);
-      const useDocRef = docRef.id;
+      // const docRef = await addDoc(refCreate, user);
+      const api = new Api();
+      const result=    await api.post ("users/register", user)
+
+    const useDocRef =result.data.data._id;
       localStorage.setItem("user_logged", JSON.stringify(useDocRef));
       showAlertMessage("success", "User created successfully.");
       setTimeout(() => {
-        navigate("/dashboard", { replace: true });
-      }, 2000);
+       navigate("/dashboard", { replace: true });
+     }, 2000);
     }
     if (type === "update") {
       await updateDoc(ref, {
